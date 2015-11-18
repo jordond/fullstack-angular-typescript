@@ -69,7 +69,7 @@ export class Console extends Logger.Base {
 
   error(message: string, data?: any): void {
     let colors = createColor(chalk.bold.bgRed, chalk.bold.red);
-    this.toConsole(createConsoleItem('ERROR', message, data));
+    this.toConsole(createConsoleItem('ERROR', message, data), colors);
   }
 
   warning(message: string, data?: any): void {

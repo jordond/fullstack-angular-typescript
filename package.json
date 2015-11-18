@@ -1,7 +1,8 @@
 {
-  "name": "ticino-hottowel",
-  "description": "Project Generated from HotTowel Angular",
-  "version": "0.0.0",
+  "name": "plex-landing",
+  "description": "Landing page for Plex server instance",
+  "version": "0.0.1",
+  "author": "jordond",
   "scripts": {
     "init": "npm install",
     "install": "bower install",

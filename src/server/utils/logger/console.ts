@@ -110,7 +110,7 @@ function createConsoleItem(level: string, message: string, data?: any): IConsole
     level: level,
     message: message,
     data: data || ''
-  }
+  };
 }
 
 /**
@@ -123,5 +123,5 @@ function createColor(level: any, message?: any): IConsoleColors {
   return {
     level: level,
     message: message || level
-  }
+  };
 }

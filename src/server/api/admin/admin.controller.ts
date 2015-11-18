@@ -6,7 +6,7 @@ let all: Api.IRoute = {
     let test: string[] = ['test', '123', 'ddd'];
     res.status(200).json(test);
   }
-}
+};
 
 let create: Api.IRoute = {
   path: '/',
@@ -14,7 +14,7 @@ let create: Api.IRoute = {
     let test = req.body.test;
     res.status(200).json('Sucess');
   }
-}
+};
 
 let read: Api.IRoute = {
   path: '/:id',
@@ -24,9 +24,9 @@ let read: Api.IRoute = {
       let item: boolean = true;
       return res.status(200).json(item);
     }
-    return  res.status(404).json('Not found');
+    return res.status(404).json('Not found');
   }
-}
+};
 
 let update: Api.IRoute = {
   path: '/:id',
@@ -38,7 +38,7 @@ let update: Api.IRoute = {
     }
     return res.status(404).json('Not found');
   }
-}
+};
 
 let destroy: Api.IRoute = {
   path: '/:id',
@@ -46,7 +46,7 @@ let destroy: Api.IRoute = {
     console.log('Deleting item with id of ', req.param('id'));
     return res.status(204);
   }
-}
+};
 
 export class Controller implements Api.IController {
   all: Api.IRoute = all;

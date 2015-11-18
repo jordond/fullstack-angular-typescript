@@ -1,4 +1,5 @@
 import moment = require('moment');
+import merge = require('merge');
 
 /**
  * Logger.ILoggerOptions
@@ -30,7 +31,7 @@ export class Base {
   constructor(tag: string, options?: ILoggerOptions) {
     this._tag = tag;
     if (options !== null) {
-      this._options = Object.assign(this._options, options);
+      this._options = merge(this._options, options);
       this._options.levels = Array.prototype.map((item) => item.toUpperCase());
     }
     this._levelsMaxLength = levelsLength(this._options.levels).length;
@@ -74,7 +75,7 @@ export class Base {
     }
     if (this._levelsMaxLength > level.length) {
       var diff = this._levelsMaxLength - level.length;
-      level = level.toUpperCase() + ' '.repeat(diff);
+      level = level.toUpperCase() + Array(diff).join(' ');
     } else {
       level = level.toUpperCase().slice(0, this._levelsMaxLength - 1);
     }
@@ -98,10 +99,12 @@ export class Base {
  */
 function levelsLength(a: string[]): string {
   var c = 0, d = 0, l = 0, i = a.length;
-  if (i) while (i--) {
-    d = a[i].length;
-    if (d > c) {
-      l = i; c = d;
+  if (i) {
+    while (i--) {
+      d = a[i].length;
+      if (d > c) {
+        l = i; c = d;
+      }
     }
   }
   return a[l];

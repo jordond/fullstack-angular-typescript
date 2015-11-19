@@ -1,5 +1,7 @@
-import express = require('express');
-import path = require('path');
+'use strict';
+
+import * as express from 'express';
+import * as path from 'path';
 
 export const API_BASE: string = '/api/';
 

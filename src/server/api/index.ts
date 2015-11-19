@@ -1,12 +1,12 @@
 'use strict';
 
-import express = require('express');
-import path = require('path');
+import * as express from 'express';
+import * as path from 'path';
 
-import loaderUtil = require('../utils/loader');
+import { readDirs } from '../utils/loader';
 
 export let load = (app: express.Application) => {
-  loaderUtil.dirs(__dirname, (err, dirs) => {
+  readDirs(__dirname, (err, dirs) => {
     if (err) {
       // Do error
     }

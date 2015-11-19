@@ -1,5 +1,6 @@
-import moment = require('moment');
-import merge = require('merge');
+'use strict';
+
+var moment = require('moment');
 
 /**
  * Logger.ILoggerOptions
@@ -17,7 +18,7 @@ interface ILoggerOptions {
  * Base class to handle all the setup required for the logger class
  * Including setting the tag name, and handling the settings and log levels
  */
-export class Base {
+export default class Base {
 
   private _tag: string;
   private _levelsMaxLength: number;
@@ -30,8 +31,8 @@ export class Base {
 
   constructor(tag: string, options?: ILoggerOptions) {
     this._tag = tag;
-    if (options !== null) {
-      this._options = merge(this._options, options);
+    if (typeof options !== 'undefined') {
+      this._options = Object.assign(this._options, options);
       this._options.levels = Array.prototype.map((item) => item.toUpperCase());
     }
     this._levelsMaxLength = levelsLength(this._options.levels).length;
@@ -75,7 +76,7 @@ export class Base {
     }
     if (this._levelsMaxLength > level.length) {
       var diff = this._levelsMaxLength - level.length;
-      level = level.toUpperCase() + Array(diff).join(' ');
+      level = level.toUpperCase() + ' '.repeat(diff + 1);
     } else {
       level = level.toUpperCase().slice(0, this._levelsMaxLength - 1);
     }

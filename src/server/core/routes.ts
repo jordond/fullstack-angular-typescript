@@ -1,7 +1,8 @@
-/// <reference path="../../../typings/tsd.d.ts" />
-import express = require('express');
+'use strict';
 
-import Api = require('../api');
+import * as express from 'express';
+
+import * as Api from '../api';
 
 export class Routes {
   private _app: express.Application;

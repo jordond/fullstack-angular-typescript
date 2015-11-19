@@ -1,4 +1,6 @@
-import Api = require('../api.manager');
+'use strict';
+
+import * as Api from '../api.manager';
 
 let all: Api.IRoute = {
   path: '/',

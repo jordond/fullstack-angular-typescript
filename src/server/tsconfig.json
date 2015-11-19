@@ -2,9 +2,9 @@
   "compilerOptions": {
     "module": "commonjs",
     "noImplicitAny": true,
-    "removeComments": false,
+    "removeComments": true,
     "preserveConstEnums": true,
-    "target": "ES5",
+    "target": "ES6",
     "sourceMap": true,
     "outDir": "build/server"
   }

@@ -1,8 +1,6 @@
-/*jshint node:true*/
-
 'use strict';
 
-import express = require('express');
+import * as express from 'express';
 
 //TODO EG type next argument
 export function notFoundMiddleware(req: express.Request, res: express.Response, next:any) {

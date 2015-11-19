@@ -1,6 +1,8 @@
-import chalk = require('chalk');
+'use strict';
 
-import Logger = require('./');
+var chalk = require('chalk');
+
+import { default as Logger } from './';
 
 /**
  * Logger.Console.IConsoleItem
@@ -26,7 +28,7 @@ export interface IConsoleColors {
  * Inherits from Logger.Base
  * Handles the outputting of information to the console
  */
-export class Console extends Logger.Base {
+export default class Console extends Logger {
   constructor(tag: string) {
     super(tag);
   }
@@ -46,19 +48,17 @@ export class Console extends Logger.Base {
   }
 
   /**
-   * Log level methods
-   */
-
-  /**
    * Custom log level with option to force outputting if it is
    * not in the list of acceptable levels
-   * @param {IConsoleItem}  item  console data
-   * @param {boolean} force (optionsl) force output, default true
+   * @param {string}  message  message to output
+   * @param {data}    data  (optional) extra data to output
+   * @param {boolean} force (optional) force output, default true
    */
-  public out(item: IConsoleItem, force?: boolean): void {
+  public out(message: string, data?: any, force?: boolean): void {
     if (typeof force === 'undefined') {
       force = true;
     }
+    let item = { level: 'LOG', message: message, data: data };
     this.toConsole(item, null, force);
   }
 

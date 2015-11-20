@@ -32,7 +32,7 @@ I will not be focusing heavily on testing, but I will try to test the server sid
 ## Installing
 
 1. Clone the repo `git clone git@github.com:jordond/hoogflix.git`
-2. Instal dependencies `npm install`
+2. Install dependencies `npm install`
 3. Compile by running `gulp build`
 
 ## Running

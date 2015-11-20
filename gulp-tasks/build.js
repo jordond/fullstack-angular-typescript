@@ -16,7 +16,7 @@ gulp.task('build:server', conf.help.buildServer, ['vet:server'], function () {
       .pipe($.sourcemaps.init())
         .pipe($.typescript(server))
         .pipe($.babel())
-      .pipe($.sourcemaps.write('.'))
+      .pipe($.sourcemaps.write('.', { includeContent: false, sourceRoot: path.join(__dirname, '..', '/src/server/') }))
       .pipe($.size({ title: 'TS:server', showFiles: showAllFiles }))
     .pipe($.plumber.stop())
     .pipe(gulp.dest(path.join(conf.paths.build, 'server')));

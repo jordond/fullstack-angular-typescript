@@ -2,7 +2,7 @@
 
 import * as express from 'express';
 
-import * as Api from '../api';
+import * as Api from '../api/index';
 
 export class Routes {
   private _app: express.Application;

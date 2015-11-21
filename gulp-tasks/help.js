@@ -8,6 +8,10 @@
  */
 
 module.exports = {
-  vetServer: 'Run TSLint on server-side .ts files',
+  vet: {
+    both: 'Lint all typescript files',
+    server: 'Lint server typescript',
+    client: 'Lint client typescript',
+  },
   buildServer: 'Compile server-side typescript into javascript'
 };

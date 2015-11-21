@@ -1,8 +1,10 @@
 'use strict';
 
-var chalk = require('chalk');
+// TODO temp fix until typescript issue is fixed
+import * as _chalk from 'chalk';
+const chalk = (_chalk as any).default;
 
-import { default as Logger } from './';
+import { default as Base, ILoggerOptions } from './base';
 
 /**
  * Logger.Console.IConsoleItem
@@ -28,9 +30,9 @@ export interface IConsoleColors {
  * Inherits from Logger.Base
  * Handles the outputting of information to the console
  */
-export default class Console extends Logger {
-  constructor(tag: string) {
-    super(tag);
+export default class Console extends Base {
+  constructor(tag: string, options?: ILoggerOptions) {
+    super(tag, options);
   }
 
   private toConsole(item: IConsoleItem, colors?: IConsoleColors, force?: boolean): void {

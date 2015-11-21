@@ -1,13 +1,14 @@
 'use strict';
 
-var moment = require('moment');
+import * as _moment from 'moment';
+const moment = (_moment as any).default;
 
 /**
  * Logger.ILoggerOptions
  * Contains the base options used by the logger base class
  */
-interface ILoggerOptions {
-  level: string;
+export interface ILoggerOptions {
+  level?: string;
   levels?: string[];
   shorten?: boolean;
   default?: string;
@@ -22,26 +23,36 @@ export default class Base {
 
   private _tag: string;
   private _levelsMaxLength: number;
-  private _options: ILoggerOptions = {
-    levels: ['VERBOSE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'LOG'],
-    level: 'INFO',
-    shorten: false,
-    default: 'INFO'
-  };
+  private _options: ILoggerOptions = {};
 
   constructor(tag: string, options?: ILoggerOptions) {
+    options = options || {};
+    let levels = options.levels || ['VERBOSE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'LOG'];
+
     this._tag = tag;
-    if (typeof options !== 'undefined') {
-      this._options = Object.assign(this._options, options);
-      this._options.levels = Array.prototype.map((item) => item.toUpperCase());
-    }
+    this._options.level = options.level || 'LEVEL';
+    this._options.levels = options.levels || levels;
+    this._options.shorten = options.shorten || false;
+    this._options.default = options.default || 'INFO';
+    console.log(moment);
+    // In case the passed in levels are not all uppercase
+    this._options.levels = levels.map((item) => item.toUpperCase());
+
     this._levelsMaxLength = levelsLength(this._options.levels).length;
   }
 
+  /**
+   * Get logger tag
+   * @returns {string} tag for the logger object
+   */
   get tag() {
     return this._tag;
   }
 
+  /**
+   * Set a new logger tag
+   * @params {string} newTag  new tag for logger
+   */
   set tag(newTag: string) {
     this._tag = newTag;
   }
@@ -80,11 +91,11 @@ export default class Base {
     } else {
       level = level.toUpperCase().slice(0, this._levelsMaxLength - 1);
     }
-    return level;
+    return '[' + level + ']';
   }
 
   timestamp(): string {
-    return '[' + moment().format('YYYY/DD/MM HH:mm:ss') + ']';
+    return '[' + moment().format('YYYY/DD/MM HH:mm:ss') + '] ';
   }
 
 } // End of Base

@@ -6,7 +6,7 @@
 			"type": "node",
 			"request": "launch",
 			"program": "build/server/index.js",
-			"stopOnEntry": true,
+			"stopOnEntry": false,
 			"args": [],
 			"cwd": ".",
 			"runtimeExecutable": null,
@@ -17,13 +17,13 @@
 				"NODE_ENV": "development"
 			},
 			"externalConsole": false,
-			"sourceMaps": true,
+			"sourceMaps": false,
 			"outDir": null
 		},
 		{
 			"name": "Attach",
-			"type": "node",
 			"request": "attach",
+      "address": "10.0.0.2",
 			"port": 5858
 		}
 	]

@@ -5,19 +5,19 @@ namespace blocks.exception {
   'use strict';
 
   export interface IExceptionHandlerConfig {
-    appErrorPrefix: string
+    appErrorPrefix: string;
   }
   export class ExceptionHandlerProvider {
     static $inject: Array<string> = [];
     constructor() { }
     config: IExceptionHandlerConfig = {
       appErrorPrefix: undefined
-    }
+    };
 
     configure(appErrorPrefix: any) {
       this.config.appErrorPrefix = appErrorPrefix;
     }
-    $get: () => { config: IExceptionHandlerConfig } = () => { return { config: this.config }; }
+    $get: () => { config: IExceptionHandlerConfig } = () => { return { config: this.config }; };
   }
 
   config.$inject = ['$provide'];

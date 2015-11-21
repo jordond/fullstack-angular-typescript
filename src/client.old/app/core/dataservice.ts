@@ -28,7 +28,7 @@ namespace app.core {
       var reason = 'query for people failed.';
       this.exception.catcher(msg)(reason);
       return this.$q.reject(msg);
-    }
+    };
   }
 
   angular

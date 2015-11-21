@@ -2,7 +2,7 @@ namespace applayout {
   'use strict';
 
   interface IHtTopNavScope {
-    navline: string
+    navline: string;
   }
 
   class HtTopNav implements ng.IDirective {

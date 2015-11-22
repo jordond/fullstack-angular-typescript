@@ -27,7 +27,7 @@
       "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
     },
     "node/node.d.ts": {
-      "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
+      "commit": "0ea013a775ce1fb90c5e41b255e1d038714ffbe5"
     },
     "assertion-error/assertion-error.d.ts": {
       "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
@@ -76,6 +76,9 @@
     },
     "angularjs/angular-mocks.d.ts": {
       "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
+    },
+    "source-map-support/source-map-support.d.ts": {
+      "commit": "0ea013a775ce1fb90c5e41b255e1d038714ffbe5"
     }
   }
 }

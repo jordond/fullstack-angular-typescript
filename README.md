@@ -8,6 +8,10 @@ I will not be focusing heavily on testing, but I will try to test the server sid
 ## Features
 
 - Written with typescript
+- Uses ES6
+- Backend & Frontend written in same workflow `Typescript -> ES6 -> Babel -> ES5`
+- Frontend is handled by webpack
+- No bower, sticking to NPM
 - More to come hopefully
 
 ## To-do
@@ -40,6 +44,54 @@ I will not be focusing heavily on testing, but I will try to test the server sid
 1. Export production environment `export ENV=production`
 2. Run the server `node build/server/app.js`
   - Optionally run `ENV=production node build/server/app.js`
+
+## Developing
+
+### Issues
+
+#### Sourcemaps
+Since I am using `Typescript -> ES6 -> Babel -> ES5` sourcemaps generation is key.  However there is a bug in
+`gulp-babel@6.1.0` seen [here](https://github.com/babel/gulp-babel/issues/54) that messes up the sourcemaps
+source filename.  So a manual fix must be applied (found in the issue above), until the issue is fixed.
+
+Not only does the filename not work properly, the actual sourceroot option for `gulp-sourcemaps` doesn't work either.
+It is not pointing to the correct path relative to the source, so you get `build/server/src/server/index.ts` instead of
+`src/server/index.ts`.  So I have added a bit of a hacky function that will count the number of slashes in the source file, that will determine how many folders deep it is, and how many `../` are required.
+
+```javascript
+function rewriteSource(file) {
+  var slashCount = file.sourceMap.file.split('/').length;
+  var subdirs = new Array(slashCount).join('../');
+  return path.join(subdirs, '../../src/server');
+}
+```
+I could just use a simple `return path.join(__dirname, '..', 'src/server');` but since I am running
+gulp on a remote server, and using VSCode locally, it ends up pointing to the absolute location on
+the remote machine not local, confusing VSCode.
+
+**I expect this to break any time now, I am monitoring the gulp-sourcemaps [issue](https://github.com/floridoo/gulp-sourcemaps/issues/163)**
+
+----
+
+#### NPM Modules
+There is a current 'bug' in the way `typescript` and `gulp-babel` handle ES6 importing in regards
+to npm modules.
+As an example:
+```javascript
+import * as moment from 'moment'
+```
+Once transpiled by typescript and babel, the resulting `moment` is an inert object instead of a function.
+Meaning that `moment().format('YYYY');` will not work, as `moment` is not a function.
+
+The issue can be found [here](https://github.com/Microsoft/TypeScript/issues/5458), and the [pull request](https://github.com/Microsoft/TypeScript/issues/5285).  For the moment the workaround is as follows:
+
+```javascript
+import * as _moment from 'moment';
+const moment = (_moment as any).default;
+```
+Yes it is ugly, but it works.
+
+----
 
 ## License
 

@@ -60,6 +60,7 @@
     "lodash": "^3.10.1",
     "main-bower-files": "^2.9.0",
     "plato": "^1.5.0",
+    "source-map-support": "^0.3.3",
     "typescript": "^1.8.0-dev.20151121",
     "wrench": "^1.5.8",
     "yargs": "^3.30.0"

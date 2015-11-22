@@ -34,7 +34,7 @@ export default class Base {
     this._options.levels = options.levels || levels;
     this._options.shorten = options.shorten || false;
     this._options.default = options.default || 'INFO';
-    console.log(moment);
+
     // In case the passed in levels are not all uppercase
     this._options.levels = levels.map((item) => item.toUpperCase());
 
@@ -83,19 +83,19 @@ export default class Base {
    */
   formatHeader(level: string): string {
     if (this._options.shorten) {
-      return '[' + level.charAt(0).toUpperCase() + ']';
+      return '[' + level.charAt(0).toUpperCase() + '] ';
     }
     if (this._levelsMaxLength > level.length) {
       var diff = this._levelsMaxLength - level.length;
-      level = level.toUpperCase() + ' '.repeat(diff + 1);
+      level = level.toUpperCase() + ' '.repeat(diff);
     } else {
-      level = level.toUpperCase().slice(0, this._levelsMaxLength - 1);
+      level = level.toUpperCase().slice(0, this._levelsMaxLength);
     }
-    return '[' + level + ']';
+    return '[' + level + '] ';
   }
 
   timestamp(): string {
-    return '[' + moment().format('YYYY/DD/MM HH:mm:ss') + '] ';
+    return '[' + moment().format('YY/DD/MM|HH:mm:ss') + ']';
   }
 
 } // End of Base

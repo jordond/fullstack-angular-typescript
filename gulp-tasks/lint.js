@@ -17,12 +17,16 @@ gulp.task('vet:client', help.vet.client, function () {
 
 gulp.task('vet', help.vet.both, ['vet:server', 'vet:client']);
 
+var listFiles = false;
 function lintFiles(title, files) {
-  return gulp.src(files)
+  var lint = gulp.src(files)
     .pipe($.plumber({ errorHandler: conf.errorHandler }))
       .pipe($.cached('vet:' + title))
         .pipe($.tslint())
         .pipe($.tslint.report('prose', { summarizeFailureOutput: true }))
-        .pipe($.size({title: 'TSLint:' + title}))
+        .pipe($.size({ title: 'Linter:' + title, showFiles: listFiles }))
     .pipe($.plumber.stop());
+
+  listFiles = true;
+  return lint;
 }

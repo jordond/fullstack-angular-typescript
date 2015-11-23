@@ -13,5 +13,10 @@ module.exports = {
     server: 'Lint server typescript',
     client: 'Lint client typescript',
   },
-  buildServer: 'Compile server-side typescript into javascript'
+  build: {
+    both: 'Compile server and bundle client',
+    server: 'Compile server typescript to ES6->ES5',
+    client: 'Bundle client source with webpack'
+  },
+  watch: 'Watch server and client files for changes'
 };

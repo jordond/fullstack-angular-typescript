@@ -1,3 +1,6 @@
+/**
+ * Handle the compilation of the server source code
+ */
 'use strict';
 
 var path = require('path');
@@ -6,14 +9,14 @@ var conf = require('./conf');
 
 var $ = require('gulp-load-plugins')();
 
-var tsConfig = require('../' + conf.tsConfig.server).compilerOptions;
+var tsConfig = require(conf.tsConfig.server).compilerOptions;
 tsConfig.typescipt = require('typescript');
 var server = $.typescript.createProject(tsConfig);
 
 var showAllFiles = false;
-gulp.task('build:server', conf.help.buildServer, ['vet:server'], function () {
+gulp.task('build:server', conf.help.build.server, ['vet:server'], function () {
   // Definition file always needs to be passed in so compiler doesn't flip
-  var definitions = path.join(__dirname, '..', 'typings/tsd.d.ts');
+  var definitions = path.join(conf.typings);
   var cache = $.cached.caches['TS:Compile'];
   if (cache) {
     delete cache[definitions];
@@ -26,8 +29,8 @@ gulp.task('build:server', conf.help.buildServer, ['vet:server'], function () {
       .pipe($.sourcemaps.init())
         .pipe($.typescript(server))
         .pipe($.babel())
+      .pipe($.size({ title: 'Compile:server', showFiles: showAllFiles }))
       .pipe($.sourcemaps.write('maps', { sourceRoot: rewriteSource }))
-      .pipe($.size({ title: 'TS:server', showFiles: showAllFiles }))
     .pipe($.plumber.stop())
     .pipe(gulp.dest(path.join(conf.paths.build, 'server')));
 
@@ -36,13 +39,7 @@ gulp.task('build:server', conf.help.buildServer, ['vet:server'], function () {
   return build;
 });
 
-
-/**
- * For testing purposes
- */
-gulp.task('test', 'test', ['build:server'], function () {
-  gulp.start('watch');
-});
+gulp.task('build', conf.help.build.both, ['build:server']);
 
 /**
  * A hack to get the proper source directory, since

@@ -18,8 +18,10 @@ var paths = {
 var serverTs = path.join(paths.server, '**/*.ts');
 var clientTs = path.join(paths.client, '**/*.ts');
 
-var serverTsconfig = path.join(paths.server, 'tsconfig.json');
-var clientTsconfig = path.join(paths.client, 'tsconfig.json');
+var serverTsconfig = path.join('..', paths.server, 'tsconfig.json');
+var clientTsconfig = path.join('..', paths.client, 'tsconfig.json');
+
+var typings = path.join(__dirname, '..', 'typings/tsd.d.ts');
 
 function errorHandler(err) {
   var title = '';
@@ -47,6 +49,7 @@ var config = {
     server: serverTs,
     client: clientTs
   },
+  typings: typings,
   errorHandler: errorHandler,
   help: require('./help')
 };

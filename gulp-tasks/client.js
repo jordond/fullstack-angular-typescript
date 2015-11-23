@@ -1,3 +1,6 @@
+/**
+ * Handle the compilation and bundling of the client side code
+ */
 'use strict';
 
 var path = require('path');
@@ -6,6 +9,9 @@ var conf = require('./conf');
 
 var $ = require('gulp-load-plugins')();
 
-gulp.task('watch', conf.help.watch, ['build'], function () {
-  gulp.watch(conf.ts.server, ['build:server']);
-});
+// lint code
+
+// bundle with webpack
+
+// setup watch?
+

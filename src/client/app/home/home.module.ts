@@ -14,6 +14,6 @@ let mod =
   angular
     .module('app.home', dependencies)
     .config(routes)
-    .directive(homeDirective);
+    .directive('home', homeDirective);
 
 export default mod.name;

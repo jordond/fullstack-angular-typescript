@@ -8,11 +8,11 @@ import core from './app/core/core.module';
 import home from './app/home/home.module';
 import admin from './app/admin/admin.module';
 
-let bootstrap =
+let app =
   angular.module('app', [
     core,
     home,
     admin
   ]);
 
-export default bootstrap;
+export default app;

@@ -8,6 +8,7 @@ require('font-awesome/css/font-awesome.css');
 import * as ngAnimate from 'angular-animate';
 import * as ngUiRouter from 'angular-ui-router';
 import * as ngMaterial from 'angular-material';
+import * as lazyLoad from 'oclazyload';
 
 // Core module config
 import routing from './core.routes';
@@ -20,7 +21,8 @@ let dependencies: string[] = [
 
 /* 3rd party modules */
   ngUiRouter,
-  ngMaterial
+  ngMaterial,
+  lazyLoad
 ];
 
 let core =

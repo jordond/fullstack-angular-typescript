@@ -6,12 +6,14 @@
  */
 
 import routes from './home.routes';
+import homeDirective from './home.directive';
 
 let dependencies: string[] = [];
 
 let mod =
   angular
     .module('app.home', dependencies)
-    .config(routes);
+    .config(routes)
+    .directive(homeDirective);
 
 export default mod.name;

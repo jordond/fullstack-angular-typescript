@@ -1,16 +1,23 @@
 {
   "name": "plex-landing",
   "description": "Landing page for Plex server instance",
-  "version": "0.0.1",
-  "author": "jordond",
+  "version": "0.0.2",
+  "author": {
+    "name" : "Jordon de Hoog",
+    "email" : "jordon@hoogit.ca",
+    "url" : "http://github.com/jordond"
+  },
   "repository": {
     "url": "git@github.com:jordond/plex-landing"
   },
   "license": "MIT",
   "scripts": {
     "init": "npm install",
-    "start": "node src/server/app.js",
-    "test": "gulp test"
+    "vet": "gulp vet",
+    "dev": "gulp dev",
+    "debug": "gulp dev --debug",
+    "deploy": "gulp deploy",
+    "start": "gulp build && node build/server"
   },
   "dependencies": {
     "angular": "^1.4.8",

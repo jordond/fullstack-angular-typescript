@@ -1,11 +1,11 @@
-'use strict';
-
 /**
  * Contains all the task descriptions to be used with gulp-help package
  * {
  *   taskName: 'Task description'
  * }
  */
+
+'use strict';
 
 module.exports = {
   server: {
@@ -27,5 +27,6 @@ module.exports = {
   watch: 'Watch server and client files for changes',
   clean: 'Clean compiled javascript',
   optimize: 'Compile server and client for production',
-  deploy: 'Compile optimized code and deploy to remote server'
+  deploy: 'Compile optimized code and deploy to remote server',
+  bump: 'Automatically update version number, check README'
 };

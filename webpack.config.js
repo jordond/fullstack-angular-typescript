@@ -1,19 +1,23 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 var entryTs = path.resolve('./src/client/index.ts');
 var entryOut = path.resolve('./build/client');
 var indexHtml = path.resolve('./src/client/index.html');
 
 module.exports = {
-  entry: entryTs,
+  entry: {
+    vendor: ['angular', 'angular-animate', 'angular-aria', 'angular-material', 'angular-ui-router'],
+    app: entryTs
+  },
   output: {
     path: entryOut,
-    filename: 'bundle-[hash:6].js',
-    sourceMapFilename: 'bundle-[hash:6].js.map'
+    filename: 'js/[name].[hash:6].bundle.js',
+    sourceMapFilename: 'js/[name].[hash:6].bundle.js.map',
+    publicPath: 'assets/'
   },
   module: {
     loaders: [{
@@ -44,6 +48,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: indexHtml,
       inject: 'body'
+    }),
+    new CommonsChunkPlugin({
+      name: 'vendor',
+      filename: 'js/vendor-[hash:6].js',
+      minChunks: Infinity
     })
   ],
   resolve: {

@@ -22,6 +22,12 @@ var clientTsconfig = path.join(paths.client, 'tsconfig.json');
 var clientTs = path.join(paths.client, '**/*.ts');
 var webpackConf = path.resolve('webpack.config.js');
 
+var browserSync = {
+  host: 'localhost',
+  port: 3000,
+  proxy: 'http://localhost:9000' // TODO read node server from env.js file
+};
+
 var typings = path.resolve('./typings/tsd.d.ts');
 
 function errorHandler(err) {
@@ -52,6 +58,7 @@ var config = {
   },
   typings: typings,
   webpack: require(webpackConf),
+  browserSync: browserSync,
   errorHandler: errorHandler,
   help: require('./gulp-tasks/help')
 };

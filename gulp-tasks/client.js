@@ -11,6 +11,7 @@ var path = require('path');
 var gulp = require('gulp-help')(require('gulp'));
 var del = require('del');
 var argv = require('yargs').argv;
+var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 var $ = require('gulp-load-plugins')();
 
 var conf = require('../gulp.config');
@@ -20,12 +21,9 @@ var linter = require('./linter')(gulp);
 var isFirstRun = true;
 var isProduction = false;
 
-var mode = $.util.colors.blue('[DEVELOPMENT]');
 if (argv.p || (argv.env && argv.env.charAt(0).toLowerCase() === 'p')) {
-  mode = $.util.colors.green('[PRODUCTION]');
   isProduction = true;
 }
-$.util.log('Running in ' + mode + ' mode');
 
 gulp.task('clean:client', help.client.clean, function (done) {
   if (isFirstRun) {
@@ -59,7 +57,10 @@ gulp.task('build:client', help.client.build, ['vet:client'], function () {
       new plugins.optimize.UglifyJsPlugin({ compress: { warnings: false } })
     );
 
-  return webpack(config);
+  // If gulp dev --env=production, then watchFiles == true and webpack will watch
+  var watchFiles = isProduction;
+  isProduction = true;
+  return webpack(config, watchFiles);
 });
 
 /**
@@ -68,10 +69,7 @@ gulp.task('build:client', help.client.build, ['vet:client'], function () {
 
 gulp.task('build:client:dev', help.client.devBuild, ['vet:client'], function () {
   var webpackConf = conf.webpack;
-  webpackConf.devtool = 'sourcemap';
-  webpackConf.watch = true;
-  webpackConf.debug = true;
-  return webpack(webpackConf);
+  return webpack(webpackConf, true);
 });
 
 gulp.task('watch:client', help.client.watch, function () {
@@ -80,11 +78,22 @@ gulp.task('watch:client', help.client.watch, function () {
     gulp.start('build:client');
   } else {
     gulp.start('build:client:dev');
-    //gulp.watch(conf.ts.client, ['build:client:dev']);
   }
 });
 
-function webpack(config) {
+function webpack(config, watching) {
+  var mode = $.util.colors.blue('[DEVELOPMENT]');
+  if (isProduction) {
+    mode = $.util.colors.green('[PRODUCTION]');
+  }
+  if (watching) {
+    config.devtool = 'sourcemap';
+    config.watch = true;
+    config.debug = true;
+    config.plugins = config.plugins.concat(new BrowserSyncPlugin(conf.browserSync));
+  }
+  $.util.log('Running webpack in ' + mode + ' mode');
+
   return gulp.src(conf.ts.client)
     .pipe($.webpack(config))
     .pipe(gulp.dest(path.join(conf.paths.build, 'client')));

@@ -3,6 +3,7 @@
 var gulp = require('gulp-help')(require('gulp'));
 var wrench = require('wrench');
 var sync = require('gulp-sync')(gulp);
+var argv = require('yargs').argv;
 
 var help = require('./gulp-tasks/help');
 
@@ -36,7 +37,13 @@ gulp.task('vet', help.vet, ['vet:server', 'vet:client']);
 /**
  * Compile all of the typescript files and optimize for production
  */
-gulp.task('build', help.build, ['build:server', 'build:client']);
+gulp.task('build', help.build, ['build:server'], function () {
+  if (argv.d || (argv.env && argv.env.charAt(0).toLowerCase() === 'd')) {
+    gulp.start('build:client:dev');
+  } else {
+    gulp.start('build:client');
+  }
+});
 
 /**
  * Compile for development and watch changes

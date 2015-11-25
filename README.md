@@ -1,9 +1,8 @@
-# Hoogflix Landing page
+# A Typescript, Angular, Webpack fullstack starter app
 
-A landing page front-end for my Plex server.  This is mainly a practice application for me using TypeScript.
-The initial code base is from John Papa's [hottowel-angular-typescript](https://github.com/johnpapa/hottowel-angular-typescript), modified for my purposes.
+**Formerly plex-landing, will be using this for plex-landing in the future**
 
-I will not be focusing heavily on testing, but I will try to test the server side.
+A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescript, ES6, Angular, and Webpack, with a nice gulp build system.  The client side relies on npm only and not bower.
 
 ## Features
 
@@ -12,32 +11,62 @@ I will not be focusing heavily on testing, but I will try to test the server sid
 - Backend & Frontend written in same workflow `Typescript -> ES6 -> Babel -> ES5`
 - Frontend is handled by webpack
 - No bower, sticking to NPM
-- More to come hopefully
+- Handy gulp tasks
+- Easy configuration
+
+## Tech
+- **Backend**
+  - Node (>v4)
+  - Typescript
+  - Babel
+- **Frontend**
+  - Angular 1.x
+  - Typescript
+  - ES6
+  - Webpack
+  - Angular Material
+- **Build System**
+  - Gulp
+  - Webpack
+  - Babel
+  - BrowserSync
+  - many more...
 
 ## To-do
+- I am currently scaffolding out the build system
+- Add gulp scripts to the `package.json`
+- **Backend**
+  - Redo the routes, and route loader
+  - Implement sockets and configs for each route
+  - Global server config, powered by a `./config.js`
+  - Make gulp read node port from `./config.js`
+- **Frontend**
+  - Add an actual front end example
+  - Maybe use `oclazyload` to lazy load modules
+  - Add a template cache so templates don't have to be loaded from server
+  - Make sure sourcemaps are working
 
-- Query plex instance for basic stats such as:
-  - On/offline
-  - Number of active users
-  - Count of items in each library
-- If offline show reason and message
-- Link to go to plex
-- Email form to request access to plex server
-  - Rate limit
-  - XSS protection
-- Optionally
-  - Admin dashboard
-    - Added users
-    - Pending users
-    - Form stats
-  - Turn into a docker application
-  - Generify it so others can use it
+## Main Tasks
+**Soon to be replaced by npm scripts**
+- `gulp`: Display a list of all available tasks
+- `gulp vet`: Run TSLint on all of the Typescript files
+- `gulp dev`: Compile server and client code, then watch for changes
+- `gulp build`: Build production optimized code
+- `gulp deploy`: Deploy production code to remote server `deploy.config.js` needs to be edited
+
+### Flags
+- `-p | --env=production`: Force the building of production optimized code
+- `-d | --env=development`: Force the non optimized code
 
 ## Installing
 
 1. Clone the repo `git clone git@github.com:jordond/hoogflix.git`
 2. Install dependencies `npm install`
 3. Compile by running `gulp build`
+
+## Configuration
+
+If you plan to use the deploy script, be sure to edit `deploy.config.js` with the information of the server.  To make changes to the folder structure change the paths in `gulp.config.js`.  BrowserSync settings can also be found in `gulp.config.js`.
 
 ## Running
 

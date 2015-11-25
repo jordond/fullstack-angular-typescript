@@ -49,3 +49,9 @@ gulp.task('build', help.build, ['build:server'], function () {
  * Compile for development and watch changes
  */
 gulp.task('dev', help.watch, ['watch:server', 'watch:client']);
+
+
+/**
+ * Compile source then deploy to remote server
+ */
+gulp.task('deploy', help.deploy, ['deploy:all']);

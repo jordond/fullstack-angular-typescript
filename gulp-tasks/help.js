@@ -12,7 +12,8 @@ module.exports = {
     vet: 'Lint server typescript only',
     build: 'Compile server typescript to ES5',
     watch: 'Watch server files for changes',
-    clean: 'Clean existing server javascript'
+    clean: 'Clean existing server javascript',
+    deploy: 'Deploy only server files to server'
   },
   client: {
     vet: 'Lint client typescript only',
@@ -25,5 +26,6 @@ module.exports = {
   build: 'Compile and optimize source for production',
   watch: 'Watch server and client files for changes',
   clean: 'Clean compiled javascript',
-  optimize: 'Compile server and client for production'
+  optimize: 'Compile server and client for production',
+  deploy: 'Compile optimized code and deploy to remote server'
 };

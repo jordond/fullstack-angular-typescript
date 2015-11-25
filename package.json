@@ -54,6 +54,7 @@
     "gulp-order": "^1.1.1",
     "gulp-plumber": "^1.0.1",
     "gulp-print": "^2.0.1",
+    "gulp-rsync": "0.0.5",
     "gulp-size": "^2.0.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-tslint": "^3.6.0",

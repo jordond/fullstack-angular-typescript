@@ -72,7 +72,7 @@ gulp.task('build:client:dev', help.client.devBuild, ['vet:client'], function () 
   return webpack(webpackConf, true);
 });
 
-gulp.task('watch:client', help.client.watch, function () {
+gulp.task('watch:client', false, function () {
   // Let webpack handle the watching & compilation
   if (isProduction) {
     gulp.start('build:client');

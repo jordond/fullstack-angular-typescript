@@ -63,7 +63,7 @@ gulp.task('build:server', help.server.build, ['vet:server'], function () {
   return built;
 });
 
-gulp.task('watch:server', help.server.watch, ['build:server'], function () {
+gulp.task('watch:server', false, ['build:server'], function () {
   gulp.watch(conf.ts.server, ['build:server']);
 });
 

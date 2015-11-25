@@ -1,15 +1,19 @@
 var path = require('path');
 var webpack = require('webpack');
+
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 var entryTs = path.resolve('./src/client/index.ts');
 var entryOut = path.resolve('./build/client');
+var indexHtml = path.resolve('./src/client/index.html');
 
 module.exports = {
   entry: entryTs,
   output: {
     path: entryOut,
-    filename: 'bundle-[hash:6].js'
+    filename: 'bundle-[hash:6].js',
+    sourceMapFilename: 'bundle-[hash:6].js.map'
   },
   module: {
     loaders: [{
@@ -37,7 +41,10 @@ module.exports = {
     }]
   },
   plugins: [
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({
+      template: indexHtml,
+      inject: 'body'
+    })
   ],
   resolve: {
     modulesDirectories: [

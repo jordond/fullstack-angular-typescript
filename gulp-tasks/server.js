@@ -1,20 +1,45 @@
 /**
- * Handle the compilation of the server source code
+ * Handle building of server source
+ * - Clean all existing compiled server files
+ * - Lint the typescript
+ * - Compile to ES6 then Babel to ES5 w/Sourcemaps
+ * - Watch for changes and rebuild only changed files
  */
 'use strict';
 
 var path = require('path');
 var gulp = require('gulp-help')(require('gulp'));
-var conf = require('./conf');
-
 var $ = require('gulp-load-plugins')();
+var del = require('del');
 
+var conf = require('../gulp.config');
+var help = conf.help;
+
+var linter = require('./linter')(gulp);
+var isFirstRun = true;
+
+gulp.task('clean:server', help.server.clean, function (done) {
+  if (isFirstRun) {
+    var dir = path.join(conf.paths.build, 'server');
+    $.util.log('Cleaning ' + $.util.colors.blue('[' + path.resolve(dir) + ']'));
+    return del(dir, done);
+  }
+  $.util.log($.util.colors.green('[Watching] Not cleaning'));
+  return done();
+});
+
+gulp.task('vet:server', help.server.vet, ['clean:server'], function () {
+  return linter('Server', conf.ts.server, !isFirstRun);
+});
+
+/**
+ * Create the Typescript config object for gulp-typescript
+ */
 var tsConfig = require(conf.tsConfig.server).compilerOptions;
 tsConfig.typescipt = require('typescript');
 var server = $.typescript.createProject(tsConfig);
 
-var showAllFiles = false;
-gulp.task('build:server', conf.help.build.server, ['vet:server'], function () {
+gulp.task('build:server', help.server.build, ['vet:server'], function () {
   // Definition file always needs to be passed in so compiler doesn't flip
   var definitions = path.join(conf.typings);
   var cache = $.cached.caches['TS:Compile'];
@@ -23,23 +48,24 @@ gulp.task('build:server', conf.help.build.server, ['vet:server'], function () {
   }
 
   // Transpile only changed files to ES6 then to Babel ES5
-  var build = gulp.src([conf.ts.server, definitions], { base: conf.paths.server })
+  var built = gulp.src([conf.ts.server, definitions], { base: conf.paths.server })
     .pipe($.plumber({ errorHandler: conf.errorHandler }))
       .pipe($.cached('TS:Compile'))
       .pipe($.sourcemaps.init())
         .pipe($.typescript(server))
         .pipe($.babel())
-      .pipe($.size({ title: 'Compile:server', showFiles: showAllFiles }))
+      .pipe($.size({ title: 'Compile:server', showFiles: !isFirstRun }))
       .pipe($.sourcemaps.write('maps', { sourceRoot: rewriteSource }))
     .pipe($.plumber.stop())
     .pipe(gulp.dest(path.join(conf.paths.build, 'server')));
 
-  // For gulp-size first run show no files, only output changed files
-  showAllFiles = true;
-  return build;
+  isFirstRun = false;
+  return built;
 });
 
-gulp.task('build', conf.help.build.both, ['build:server']);
+gulp.task('watch:server', help.server.watch, ['build:server'], function () {
+  gulp.watch(conf.ts.server, ['build:server']);
+});
 
 /**
  * A hack to get the proper source directory, since

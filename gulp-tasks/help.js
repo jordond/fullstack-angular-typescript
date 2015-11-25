@@ -8,15 +8,22 @@
  */
 
 module.exports = {
-  vet: {
-    both: 'Lint all typescript files',
-    server: 'Lint server typescript',
-    client: 'Lint client typescript',
+  server: {
+    vet: 'Lint server typescript only',
+    build: 'Compile server typescript to ES5',
+    watch: 'Watch server files for changes',
+    clean: 'Clean existing server javascript'
   },
-  build: {
-    both: 'Compile server and bundle client',
-    server: 'Compile server typescript to ES6->ES5',
-    client: 'Bundle client source with webpack'
+  client: {
+    vet: 'Lint client typescript only',
+    build: 'Bundle optimized client source code with webpack',
+    devBuild: 'Bundle source with webpack in debug mode',
+    watch: 'Watch client files for changes',
+    clean: 'Clean existing client javascript'
   },
-  watch: 'Watch server and client files for changes'
+  vet: 'Lint both client and server typescript',
+  build: 'Compile and optimize source for production',
+  watch: 'Watch server and client files for changes',
+  clean: 'Clean compiled javascript',
+  optimize: 'Compile server and client for production'
 };

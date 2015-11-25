@@ -2,21 +2,43 @@
 
 var gulp = require('gulp-help')(require('gulp'));
 var wrench = require('wrench');
+var sync = require('gulp-sync')(gulp);
+
+var help = require('./gulp-tasks/help');
 
 /**
- *  This will load all js or coffee files in the gulp directory
+ *  This will load all js files in the gulp directory
  *  in order to load all gulp tasks
  */
-wrench.readdirSyncRecursive('./gulp-tasks').filter(function(file) {
+wrench.readdirSyncRecursive('./gulp-tasks').filter(function (file) {
   return (/\.(js)$/i).test(file);
-}).map(function(file) {
+}).map(function (file) {
   require('./gulp-tasks/' + file);
 });
 
 /**
- *  Default task clean temporaries directories and launch the
- *  main optimization build task
+ *  Default task display all of the available tasks
  */
 gulp.task('default', false, function () {
   gulp.start('help');
 });
+
+/**
+ * Clean all existing compiled files
+ */
+gulp.task('clean', help.clean, ['clean:server', 'clean:client']);
+
+/**
+ * Run the linter on all the typescript files
+ */
+gulp.task('vet', help.vet, ['vet:server', 'vet:client']);
+
+/**
+ * Compile all of the typescript files and optimize for production
+ */
+gulp.task('build', help.build, ['build:server', 'build:client']);
+
+/**
+ * Compile for development and watch changes
+ */
+gulp.task('dev', help.watch, ['watch:server', 'watch:client']);

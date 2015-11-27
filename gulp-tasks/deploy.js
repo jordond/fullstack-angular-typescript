@@ -33,6 +33,11 @@ gulp.task('deploy:server', help.server.deploy, ['build:server'], deploy);
 gulp.task('deploy:all', false, ['build:server', 'build:client'], deploy);
 
 function deploy() {
-  return gulp.src(path.join(gulpconf.paths.build, '**/*'))
+  var files = [
+    path.join(gulpconf.paths.build, '**/*'),
+    './package.json'
+  ];
+  files = files.concat(options.include);
+  return gulp.src(files)
     .pipe($.rsync(options));
 }

@@ -10,7 +10,10 @@ let log = new Logger('App', { level: 'VERBOSE' });
 
 log.log('test message', { some: 'data' });
 log.error('test message', { some: 'data' });
+
+// log.warning doesn't log, for some reason
 log.warning('test message', { some: 'data' });
+
 log.info('test message', { some: 'data' });
 log.debug('test message', { some: 'data' });
 log.verbose('test message', { some: 'data' });

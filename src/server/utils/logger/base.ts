@@ -91,7 +91,7 @@ export default class Base {
     } else {
       level = level.toUpperCase().slice(0, this._levelsMaxLength);
     }
-    return '[' + level + '] ';
+    return '[' + level + ']';
   }
 
   timestamp(): string {

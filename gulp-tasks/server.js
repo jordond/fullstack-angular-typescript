@@ -55,7 +55,7 @@ gulp.task('build:server', help.server.build, ['vet:server'], function () {
         .pipe($.typescript(server))
         .pipe($.babel())
       .pipe($.size({ title: 'Compile:server', showFiles: !isFirstRun }))
-      .pipe($.sourcemaps.write('maps', { sourceRoot: rewriteSource }))
+      .pipe($.sourcemaps.write('maps', { includeContent: true, sourceRoot: rewriteSource }))
     .pipe($.plumber.stop())
     .pipe(gulp.dest(path.join(conf.paths.build, 'server')));
 

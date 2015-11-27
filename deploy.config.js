@@ -47,10 +47,22 @@ module.exports = {
   clean: true,
 
   /**
+   * Extra files to include in the deploy, accecepts vinlyfs globs
+   * ex 'app/*.spec.js'
+   * type: array
+   */
+  include: [
+    './package.json',
+    './config.json.example'
+  ],
+
+  /**
    * List of files to exclude from the deploy
    * type: array
    * default: []
    */
-  exclude: []
+  exclude: [
+    './config.json'
+  ]
 
 };

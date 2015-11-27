@@ -48,8 +48,18 @@ gulp.task('build', help.build, ['build:server'], function () {
 /**
  * Compile for development and watch changes
  */
-gulp.task('dev', help.watch, ['watch:server', 'watch:client']);
+gulp.task('dev', help.watch, ['watch:server', 'watch:client'], function () {
+  if (argv.debug || argv.debugBrk) {
+    gulp.start('nodemon');
+  }
+});
 
+/**
+ * Run nodemon to serve the node files
+ */
+gulp.task('serve', help.serve, ['watch:server', 'watch:client'], function () {
+  gulp.start('nodemon');
+});
 
 /**
  * Compile source then deploy to remote server

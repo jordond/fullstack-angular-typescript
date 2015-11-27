@@ -28,5 +28,6 @@ module.exports = {
   clean: 'Clean compiled javascript',
   optimize: 'Compile server and client for production',
   deploy: 'Compile optimized code and deploy to remote server',
-  bump: 'Automatically update version number, check README'
+  bump: 'Automatically update version number, check README',
+  serve: 'Launch node server in debug mode'
 };

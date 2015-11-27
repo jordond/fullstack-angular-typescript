@@ -1,14 +1,14 @@
 {
-  "name": "plex-landing",
-  "description": "Landing page for Plex server instance",
+  "name": "fullstack-angular-typescript",
+  "description": "A starter app for typescript, node, es6, webpack, and angular",
   "version": "0.0.2",
   "author": {
-    "name" : "Jordon de Hoog",
-    "email" : "jordon@hoogit.ca",
-    "url" : "http://github.com/jordond"
+    "name": "Jordon de Hoog",
+    "email": "jordon@hoogit.ca",
+    "url": "http://github.com/jordond"
   },
   "repository": {
-    "url": "git@github.com:jordond/plex-landing"
+    "url": "https://github.com/jordond/fullstack-angular-typescript"
   },
   "license": "MIT",
   "scripts": {
@@ -29,6 +29,7 @@
     "chalk": "^1.1.1",
     "express": "^4.13.3",
     "font-awesome": "^4.4.0",
+    "lodash": "^3.10.1",
     "merge": "^1.2.0",
     "moment": "^2.10.6",
     "morgan": "^1.6.1",
@@ -70,7 +71,6 @@
     "gulp-webpack": "^1.5.0",
     "html-loader": "^0.3.0",
     "html-webpack-plugin": "^1.7.0",
-    "lodash": "^3.10.1",
     "ng-annotate": "^1.0.2",
     "ng-annotate-loader": "0.0.10",
     "node-sass": "^3.4.2",

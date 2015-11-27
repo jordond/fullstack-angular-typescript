@@ -51,12 +51,22 @@ A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescr
 - `gulp`: Display a list of all available tasks
 - `gulp vet`: Run TSLint on all of the Typescript files
 - `gulp dev`: Compile server and client code, then watch for changes
+- `gulp serve`: Start up nodemon in debug mode, instead of using IDE debugger
 - `gulp build`: Build production optimized code
 - `gulp deploy`: Deploy production code to remote server `deploy.config.js` needs to be edited
+- `gulp bump`: Increment the version, see below for flags
 
 ### Flags
 - `-p | --env=production`: Force the building of production optimized code
 - `-d | --env=development`: Force the non optimized code
+- `--port=5000`: Specify the proxy port for browserSync (port node will be listening)
+- `--debug || --debug-brk`: Will force `gulp dev` to start nodemon
+- **Versioning**
+  - `--type=pre` bump the prerelease version *.*.*-x
+  - `--type=patch` or no flag will bump the patch version *.*.x
+  - `--type=minor` bump the minor version *.x.*
+  - `--type=major` bump the major version x.*.*
+  - `--version=x.x.x | -v x.x.x` bump to a specific version and ignore other flags
 
 ## Installing
 

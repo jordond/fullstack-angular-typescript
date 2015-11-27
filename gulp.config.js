@@ -6,12 +6,19 @@
 
 var path = require('path');
 var gutil = require('gulp-util');
+var argsv = require('yargs').argv;
+
+var nodeServer = {
+  port: 9000,
+  env: 'development'
+};
 
 var browserSync = {
   host: 'localhost',
   port: 3000,
-  proxy: 'http://localhost:9000' // TODO read node server from env.js file
+  proxy: 'http://localhost:' + (argsv.port || nodeServer.port || 9000) // TODO read node server from env.js file
 };
+
 
 var paths = {
   src: path.resolve('./src'),
@@ -62,7 +69,8 @@ var config = {
   browserSync: browserSync,
   errorHandler: errorHandler,
   help: require('./gulp-tasks/help'),
-  deploy: require('./deploy.config')
+  deploy: require('./deploy.config'),
+  server: nodeServer
 };
 
 module.exports = config;

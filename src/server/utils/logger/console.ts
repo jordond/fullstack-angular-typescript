@@ -35,9 +35,15 @@ export default class Console extends Base {
     super(tag, options);
   }
 
+  /**
+   * Do the heavy lifting and output the item to the console
+   * @param {IConsoleItem}    item    Object containing console info
+   * @param {IConsoleColors}  colors  output using chalk colors
+   * @param {Boolean}         force (optional) always output to console
+   */
   private toConsole(item: IConsoleItem, colors?: IConsoleColors, force?: boolean): void {
     if (this.shouldLog(item.level) || force) {
-      item.level = this.formatHeader(item.level);
+      item.level = this.formatHeader(item.level) + ' ';
       item.data = item.data || '';
       if (colors === null) {
         console.log(chalk.gray(this.timestamp()) + item.level + this.tag + item.message, item.data);
@@ -64,31 +70,62 @@ export default class Console extends Base {
     this.toConsole(item, null, force);
   }
 
+  /**
+   * Lowest level of logging outputs as green
+   * @param {string}  message Content to output
+   * @param {any}     data    Extra info to pass to console
+   */
   log(message: string, data?: any): void {
     let colors = createColor(chalk.green);
     this.toConsole(createConsoleItem('LOG', message, data), colors);
   }
 
+  /**
+   * When something has gone wrong
+   * Always pass 'true' to {this.toConsole}, so that it is always outputted
+   * @param {string}  message Content to output
+   * @param {any}     data    Extra info to pass to console
+   */
   error(message: string, data?: any): void {
     let colors = createColor(chalk.bold.bgRed, chalk.bold.red);
-    this.toConsole(createConsoleItem('ERROR', message, data), colors);
+    this.toConsole(createConsoleItem('ERROR', message, data), colors, true);
   }
 
+  /**
+   * Something is not acceptable, but not desired
+   * @param {string}  message Content to output
+   * @param {any}     data    Extra info to pass to console
+   */
   warning(message: string, data?: any): void {
     let colors = createColor(chalk.bold.bgYellow, chalk.bold.yellow);
     this.toConsole(createConsoleItem('WARNING', message, data), colors);
   }
 
+  /**
+   * Not necessary information, but still nice to see
+   * @param {string}  message Content to output
+   * @param {any}     data    Extra info to pass to console
+   */
   info(message: string, data?: any): void {
     let colors = createColor(chalk.cyan);
     this.toConsole(createConsoleItem('INFO', message, data), colors);
   }
 
+  /**
+   * Non-important information
+   * @param {string}  message Content to output
+   * @param {any}     data    Extra info to pass to console
+   */
   debug(message: string, data?: any): void {
     let colors = createColor(chalk.magenta);
     this.toConsole(createConsoleItem('DEBUG', message, data), colors);
   }
 
+  /**
+   * Highest level of verbosity, has the most output
+   * @param {string}  message Content to output
+   * @param {any}     data    Extra info to pass to console
+   */
   verbose(message: string, data?: any): void {
     let colors = createColor(chalk.gray);
     this.toConsole(createConsoleItem('VERBOSE', message, data), colors);

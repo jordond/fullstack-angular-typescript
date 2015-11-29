@@ -11,12 +11,19 @@ var path = require('path');
 var gulp = require('gulp-help')(require('gulp'));
 var $ = require('gulp-load-plugins')();
 var del = require('del');
+var argv = require('yargs').argv;
 
 var conf = require('../gulp.config');
 var help = conf.help;
 
 var linter = require('./linter')(gulp);
 var isFirstRun = true;
+
+var isProduction = false;
+
+if (argv.p || (argv.env && argv.env.charAt(0).toLowerCase() === 'p')) {
+  isProduction = true;
+}
 
 gulp.task('clean:server', help.server.clean, function (done) {
   if (isFirstRun) {
@@ -29,53 +36,73 @@ gulp.task('clean:server', help.server.clean, function (done) {
 });
 
 gulp.task('vet:server', help.server.vet, ['clean:server'], function () {
-  return linter('Server', conf.ts.server, !isFirstRun);
+  var linted = linter('Server', conf.ts.server, !isFirstRun);
+  isFirstRun = false;
+  return linted;
 });
 
 /**
- * Create the Typescript config object for gulp-typescript
+ * Production build
  */
-var tsConfig = require(conf.tsConfig.server).compilerOptions;
-tsConfig.typescipt = require('typescript');
-var server = $.typescript.createProject(tsConfig);
 
+var plugins = require('webpack');
 gulp.task('build:server', help.server.build, ['vet:server'], function () {
-  // Definition file always needs to be passed in so compiler doesn't flip
-  var definitions = path.join(conf.typings);
-  var cache = $.cached.caches['TS:Compile'];
-  if (cache) {
-    delete cache[definitions];
-  }
+  var config = conf.wepack.server;
+  config.plugins = config.plugins.concat(
+      new plugins.DefinePlugin({ 'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+      new plugins.optimize.DeDupePlugin()
+    );
 
-  // Transpile only changed files to ES6 then to Babel ES5
-  var built = gulp.src([conf.ts.server, definitions], { base: conf.paths.server })
-    .pipe($.plumber({ errorHandler: conf.errorHandler }))
-      .pipe($.cached('TS:Compile'))
-      .pipe($.sourcemaps.init())
-        .pipe($.typescript(server))
-        .pipe($.babel())
-      .pipe($.size({ title: 'Compile:server', showFiles: !isFirstRun }))
-      .pipe($.sourcemaps.write('maps', { includeContent: true, sourceRoot: rewriteSource }))
-    .pipe($.plumber.stop())
+  var watchFiles = isProduction;
+  isProduction = true;
+  return webpack(config, watchFiles);
+});
+
+/**
+ * Development build with watch
+ */
+
+gulp.task('build:server:dev', help.server.devBuild, ['vet:server'], function () {
+  var webpackConf = conf.webpack.server;
+  return webpack(webpackConf, true);
+});
+
+gulp.task('watch:server', false, function () {
+  // Let webpack handle the watching & compilation
+  if (isProduction) {
+    gulp.start('build:server');
+  } else {
+    gulp.start('build:server:dev');
+  }
+});
+
+/**
+ * Run webpack to build files
+ * @param {Object}  config    configuration for webpack
+ * @param {Boolean} watching  whether or not to watch files
+ */
+function webpack(config, watching) {
+  var mode = $.util.colors.blue('[DEVELOPMENT]');
+  if (isProduction) {
+    mode = $.util.colors.green('[PRODUCTION]');
+  }
+  if (watching) {
+    config.watch = true;
+    config.debug = true;
+  }
+  $.util.log('Running webpack [SERVER] in ' + mode + ' mode');
+
+  var packed = gulp.src(conf.ts.server)
+    .pipe($.webpack(config))
     .pipe(gulp.dest(path.join(conf.paths.build, 'server')));
 
-  isFirstRun = false;
-  return built;
-});
-
-gulp.task('watch:server', false, ['build:server'], function () {
-  gulp.watch(conf.ts.server, ['build:server']);
-});
-
-/**
- * A hack to get the proper source directory, since
- * gulp runs remotely, and VSCode runs locally a simple
- * path.join(__dirname, '..', '../../src/server) doesn't work
- * its very hacky and will probably break.  Also need to manually apply
- * this fix to gulp-babel: https://github.com/babel/gulp-babel/issues/54
- */
-function rewriteSource(file) {
-  var slashCount = file.sourceMap.file.split('/').length;
-  var subdirs = new Array(slashCount).join('../');
-  return path.join(subdirs, '../../src/server');
+  if (argv.debug || argv.debugBrk) {
+    setTimeout(function () {
+      gulp.start('nodemon');
+    }, 3000);
+  }
+  return packed;
 }

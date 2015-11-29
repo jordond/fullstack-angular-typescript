@@ -49,7 +49,7 @@ var plugins = require('webpack');
 gulp.task('build:client', help.client.build, ['vet:client'], function () {
   var config = conf.webpack;
   config.plugins = config.plugins.concat(
-    new plugins.DefinePlugin({ 'process.env': {
+      new plugins.DefinePlugin({ 'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
@@ -68,7 +68,7 @@ gulp.task('build:client', help.client.build, ['vet:client'], function () {
  */
 
 gulp.task('build:client:dev', help.client.devBuild, ['vet:client'], function () {
-  var webpackConf = conf.webpack;
+  var webpackConf = conf.webpack.client;
   return webpack(webpackConf, true);
 });
 
@@ -81,18 +81,22 @@ gulp.task('watch:client', false, function () {
   }
 });
 
+/**
+ * Run webpack to build files
+ * @param {Object}  config    configuration for webpack
+ * @param {Boolean} watching  whether or not to watch files
+ */
 function webpack(config, watching) {
   var mode = $.util.colors.blue('[DEVELOPMENT]');
   if (isProduction) {
     mode = $.util.colors.green('[PRODUCTION]');
   }
   if (watching) {
-    config.devtool = 'sourcemap';
     config.watch = true;
     config.debug = true;
     config.plugins = config.plugins.concat(new BrowserSyncPlugin(conf.browserSync));
   }
-  $.util.log('Running webpack in ' + mode + ' mode');
+  $.util.log('Running webpack [CLIENT] in ' + mode + ' mode');
 
   return gulp.src(conf.ts.client)
     .pipe($.webpack(config))

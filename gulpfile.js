@@ -2,7 +2,6 @@
 
 var gulp = require('gulp-help')(require('gulp'));
 var wrench = require('wrench');
-var sync = require('gulp-sync')(gulp);
 var argv = require('yargs').argv;
 
 var help = require('./gulp-tasks/help');
@@ -48,11 +47,7 @@ gulp.task('build', help.build, ['build:server'], function () {
 /**
  * Compile for development and watch changes
  */
-gulp.task('dev', help.watch, ['watch:server', 'watch:client'], function () {
-  if (argv.debug || argv.debugBrk) {
-    gulp.start('nodemon');
-  }
-});
+gulp.task('dev', help.watch, ['watch:server', 'watch:client']);
 
 /**
  * Run nodemon to serve the node files

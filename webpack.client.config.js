@@ -60,5 +60,6 @@ module.exports = {
       'node_modules'
     ],
     extensions: ['', '.webpack.js', '.ts', '.js']
-  }
+  },
+  devtool: 'sourcemap'
 };

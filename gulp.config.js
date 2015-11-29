@@ -30,10 +30,11 @@ var paths = {
 
 var serverTsconfig = path.join(paths.server, 'tsconfig.json');
 var serverTs = path.join(paths.server, '**/*.ts');
+var webpackServer = path.resolve('webpack.server.config.js');
 
 var clientTsconfig = path.join(paths.client, 'tsconfig.json');
 var clientTs = path.join(paths.client, '**/*.ts');
-var webpackConf = path.resolve('webpack.config.js');
+var webpackClient = path.resolve('webpack.client.config.js');
 
 
 var typings = path.resolve('./typings/tsd.d.ts');
@@ -65,7 +66,10 @@ var config = {
     client: clientTs
   },
   typings: typings,
-  webpack: require(webpackConf),
+  webpack: {
+    server: require(webpackServer),
+    client: require(webpackClient)
+  },
   browserSync: browserSync,
   errorHandler: errorHandler,
   help: require('./gulp-tasks/help'),

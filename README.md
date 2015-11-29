@@ -9,7 +9,7 @@ A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescr
 - Written with typescript
 - Uses ES6
 - Backend & Frontend written in same workflow `Typescript -> ES6 -> Babel -> ES5`
-- Frontend is handled by webpack
+- Entire stack is handled by webpack
 - No bower, sticking to NPM
 - Handy gulp tasks
 - Easy configuration
@@ -19,6 +19,7 @@ A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescr
   - Node (>v4)
   - Typescript
   - Babel
+  - Webpack
 - **Frontend**
   - Angular 1.x
   - Typescript
@@ -89,26 +90,19 @@ If you plan to use the deploy script, be sure to edit `deploy.config.js` with th
 ### Issues
 
 #### Sourcemaps
-Since I am using `Typescript -> ES6 -> Babel -> ES5` sourcemaps generation is key.  However there is a bug in
-`gulp-babel@6.1.0` seen [here](https://github.com/babel/gulp-babel/issues/54) that messes up the sourcemaps
-source filename.  So a manual fix must be applied (found in the issue above), until the issue is fixed.
+Since I am now using webpack to handle the backend, the below fix is no longer required.
 
-Not only does the filename not work properly, the actual sourceroot option for `gulp-sourcemaps` doesn't work either.
+I also have switched to using `node-inspector` instead of of VSCode's debugger has VSCode is the problem when it comes to sourcemaps, as node-inspector can handle them just fine.
+
+~~Not only does the filename not work properly, the actual sourceroot option for `gulp-sourcemaps` doesn't work either.
 It is not pointing to the correct path relative to the source, so you get `build/server/src/server/index.ts` instead of
-`src/server/index.ts`.  So I have added a bit of a hacky function that will count the number of slashes in the source file, that will determine how many folders deep it is, and how many `../` are required.
+`src/server/index.ts`.  So I have added a bit of a hacky function that will count the number of slashes in the source file, that will determine how many folders deep it is, and how many `../` are required.~~
 
-```javascript
-function rewriteSource(file) {
-  var slashCount = file.sourceMap.file.split('/').length;
-  var subdirs = new Array(slashCount).join('../');
-  return path.join(subdirs, '../../src/server');
-}
-```
-I could just use a simple `return path.join(__dirname, '..', 'src/server');` but since I am running
+~~I could just use a simple `return path.join(__dirname, '..', 'src/server');` but since I am running
 gulp on a remote server, and using VSCode locally, it ends up pointing to the absolute location on
-the remote machine not local, confusing VSCode.
+the remote machine not local, confusing VSCode.~~
 
-**I expect this to break any time now, I am monitoring the gulp-sourcemaps [issue](https://github.com/floridoo/gulp-sourcemaps/issues/163)**
+~~**I expect this to break any time now, I am monitoring the gulp-sourcemaps [issue](https://github.com/floridoo/gulp-sourcemaps/issues/163)**~~
 
 ----
 

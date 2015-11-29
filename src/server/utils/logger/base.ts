@@ -27,7 +27,7 @@ export default class Base {
 
   constructor(tag: string, options?: ILoggerOptions) {
     options = options || {};
-    let levels = options.levels || ['VERBOSE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'LOG'];
+    let levels = options.levels || ['VERBOSE', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'LOG'];
 
     this._tag = tag;
     this._options.level = options.level || 'LEVEL';

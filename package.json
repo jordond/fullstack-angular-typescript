@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "init": "npm install",
+    "install": "npm install",
     "vet": "gulp vet",
     "dev": "gulp dev",
     "debug": "gulp dev --debug",
@@ -34,7 +34,8 @@
     "moment": "^2.10.6",
     "morgan": "^1.6.1",
     "oclazyload": "^1.0.8",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.3.0",
+    "yargs": "^3.30.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
@@ -66,6 +67,7 @@
     "gulp-webpack": "^1.5.0",
     "html-loader": "^0.3.0",
     "html-webpack-plugin": "^1.7.0",
+    "json-loader": "^0.5.4",
     "ng-annotate": "^1.0.2",
     "ng-annotate-loader": "0.0.10",
     "node-sass": "^3.4.2",
@@ -76,7 +78,6 @@
     "tslint": "^3.0.0",
     "typescript": "^1.6.2",
     "webpack": "^1.12.8",
-    "wrench": "^1.5.8",
-    "yargs": "^3.30.0"
+    "wrench": "^1.5.8"
   }
 }

@@ -5,7 +5,6 @@ var webpack = require('webpack');
 var entryTs = path.resolve('./src/server/index.ts');
 var entryOut = path.resolve('./build/server');
 
-
 var nodeModules = {};
 fs.readdirSync('node_modules')
   .filter(function(x) {
@@ -16,14 +15,15 @@ fs.readdirSync('node_modules')
   });
 
 module.exports = {
-  entry: {
-    server: entryTs
-  },
+  entry: entryTs,
   target: 'node',
+  node: {
+    __dirname: false,
+    __filename: false
+  },
   output: {
     path: entryOut,
-    filename: 'index.js',
-    sourceMapFilename: 'index.js.map'
+    filename: 'index.js'
   },
   externals: nodeModules,
   module: {
@@ -31,6 +31,10 @@ module.exports = {
       test: /\.ts$/,
       exclude: /(node_modules)/,
       loader: "babel!ts-loader"
+    }, {
+      test: /\.json$/,
+      exclude: /(node_modules)/,
+      loader: "json-loader"
     }]
   },
   plugins: [

@@ -30,11 +30,11 @@ var paths = {
 
 var serverTsconfig = path.join(paths.server, 'tsconfig.json');
 var serverTs = path.join(paths.server, '**/*.ts');
-var webpackServer = path.resolve('webpack.server.config.js');
+var webpackServer = path.resolve('./webpack.server.config.js');
 
 var clientTsconfig = path.join(paths.client, 'tsconfig.json');
 var clientTs = path.join(paths.client, '**/*.ts');
-var webpackClient = path.resolve('webpack.client.config.js');
+var webpackClient = path.resolve('./webpack.client.config.js');
 
 
 var typings = path.resolve('./typings/tsd.d.ts');

@@ -47,7 +47,7 @@ gulp.task('vet:client', help.client.vet, ['clean:client'], function () {
 
 var plugins = require('webpack');
 gulp.task('build:client', help.client.build, ['vet:client'], function () {
-  var config = conf.webpack;
+  var config = conf.webpack.client;
   config.plugins = config.plugins.concat(
       new plugins.DefinePlugin({ 'process.env': {
         'NODE_ENV': JSON.stringify('production')

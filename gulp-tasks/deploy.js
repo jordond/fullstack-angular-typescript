@@ -21,7 +21,7 @@ var options = {
   emptyDirectories: true,
   clean: conf.clean,
   recursive: conf.clean,
-  exclude: conf.exclude.concat(['env.js', 'tsd.json']),
+  exclude: conf.exclude.concat(['config.json', 'tsd.json']),
   compress: true
 };
 

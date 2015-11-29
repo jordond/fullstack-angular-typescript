@@ -47,13 +47,13 @@ gulp.task('vet:server', help.server.vet, ['clean:server'], function () {
 
 var plugins = require('webpack');
 gulp.task('build:server', help.server.build, ['vet:server'], function () {
-  var config = conf.wepack.server;
+  var config = conf.webpack.server;
   config.plugins = config.plugins.concat(
       new plugins.DefinePlugin({ 'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
-      new plugins.optimize.DeDupePlugin()
+      new plugins.optimize.DedupePlugin()
     );
 
   var watchFiles = isProduction;
@@ -77,6 +77,14 @@ gulp.task('watch:server', false, function () {
   } else {
     gulp.start('build:server:dev');
   }
+  gulp.watch(path.join(conf.paths.src, 'config.json'), ['copy:config']);
+});
+
+gulp.task('copy:config', false, function () {
+  return gulp.src([
+    path.join(conf.paths.src, 'config.json'),
+    path.join(conf.paths.src, 'example.config.json')
+  ]).pipe(gulp.dest(conf.paths.build));
 });
 
 /**
@@ -94,6 +102,9 @@ function webpack(config, watching) {
     config.debug = true;
   }
   $.util.log('Running webpack [SERVER] in ' + mode + ' mode');
+
+  // Copy over user config if it exists
+  gulp.start('copy:config');
 
   var packed = gulp.src(conf.ts.server)
     .pipe($.webpack(config))

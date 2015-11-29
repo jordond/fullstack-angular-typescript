@@ -43,14 +43,14 @@ export default class Console extends Base {
    */
   private toConsole(item: IConsoleItem, colors?: IConsoleColors, force?: boolean): void {
     if (this.shouldLog(item.level) || force) {
-      item.level = this.formatHeader(item.level) + ' ';
+      let header: string = this.formatHeader(item.level, this.tag);
       item.data = item.data || '';
       if (colors === null) {
-        console.log(chalk.gray(this.timestamp()) + item.level + this.tag + item.message, item.data);
+        console.log(chalk.gray(this.timestamp()) + header + ' ' + item.message, item.data);
       } else {
         console.log(chalk.gray(this.timestamp())
-          + colors.level(item.level)
-          + colors.message(this.tag + item.message), item.data);
+          + colors.level(header)
+          + colors.message(' ' + item.message), item.data);
       }
     }
   }

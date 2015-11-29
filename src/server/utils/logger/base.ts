@@ -78,20 +78,20 @@ export default class Base {
 
   /**
    * Format the header(level) of the log entry
-   * @param {String} level The output level
+   * @param {String}  level The output level
+   * @param {String}  tag   caller of the log
    * @returns {String}  formatted header
    */
-  formatHeader(level: string): string {
+  formatHeader(level: string, tag: string): string {
     if (this._options.shorten) {
-      return '[' + level.charAt(0).toUpperCase() + '] ';
-    }
-    if (this._levelsMaxLength > level.length) {
+      level = level.charAt(0).toUpperCase();
+    } else if (this._levelsMaxLength > level.length) {
       var diff = this._levelsMaxLength - level.length;
       level = level.toUpperCase() + ' '.repeat(diff);
     } else {
       level = level.toUpperCase().slice(0, this._levelsMaxLength);
     }
-    return '[' + level + ']';
+    return '[' + level + '][' + tag + ']';
   }
 
   timestamp(): string {
@@ -99,10 +99,6 @@ export default class Base {
   }
 
 } // End of Base
-
-/**
- * Helpers
- */
 
 /**
  * Get the longest level in the array of levels

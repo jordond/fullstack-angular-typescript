@@ -17,7 +17,7 @@ import * as _ from 'lodash';
 import prod from './environments/production';
 import dev from './environments/development';
 
-let _config: any = {
+let _config: Config.IConfig = {
 
   /**
    * Environment to run server in
@@ -28,8 +28,9 @@ let _config: any = {
    * Server paths for express
    */
   paths: {
-    root: path.normalize(__dirname + '/../..'),
-    client: path.normalize(__dirname + '/../../..'),
+    root: path.normalize(__dirname + '/..'),
+    client: path.normalize(__dirname + '/../client'),
+    server: path.normalize(__dirname + '/../server'),
     webDir: '/'
   },
 
@@ -55,6 +56,15 @@ let _config: any = {
    */
   secrets: {
     session: 'YouShOuldREAllyreplaceTHIs'
+  },
+
+  /**
+   * Api configuration, including path and security
+   * NOTE: secure is not implemented
+   */
+  api: {
+    root: '/api',
+    secure: false // Not implemented
   }
 
 };

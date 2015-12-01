@@ -36,6 +36,7 @@ fs.readFile(userConfigPath, (err: any, data: any) => {
 function init(config: Config.IConfig) {
   let log = new Logger('App', config.log);
   let timer = new ExecutionTimer();
+
   log.log('Initializing server instance');
   new App(config)
     .init()

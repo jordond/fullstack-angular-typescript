@@ -32,12 +32,15 @@ export default class App {
   init() {
     let _promise = (resolve: Function, reject: Function) => {
       let componentPromises = [
-        Routes.init(this._app, express.Router())
+        Routes.init(this._app, this._config)
       ];
 
       Promise
         .all(componentPromises)
-        .then(() => resolve())
+        .then(() => {
+          console.log('bootstrapping done');
+          this._app.listen(9000, () => resolve());
+        })
         .catch((err) => reject(err));
     };
     return new Promise(_promise);

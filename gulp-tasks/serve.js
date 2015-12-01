@@ -17,6 +17,7 @@ var colors = $.util.colors;
 gulp.task('nodemon', false, function () {
   var debugMode;
   if (args.debugBrk) {
+    // node-demon doesn't accept this?
     debugMode = 'node --debug-brk';
   } else {
     debugMode = 'node --debug';

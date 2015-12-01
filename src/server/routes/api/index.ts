@@ -56,6 +56,7 @@ export default class Api {
       this._router.route('/').all(apiBaseHandler);
       this._router.route('/*').all(invalidApiHandler);
       app.use(this._path, this._router);
+      return 'Api';
     };
 
     return Promise

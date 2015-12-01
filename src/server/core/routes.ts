@@ -3,6 +3,7 @@
 import * as express from 'express';
 
 import Api from '../routes/api/index';
+import Statics from '../routes/static/index';
 
 export default class Routes {
   /**
@@ -16,20 +17,31 @@ export default class Routes {
   static init(app: any, config: Config.IConfig) {
     let _router = express.Router();
 
-    // Register all api endpoints
-    let api = new Api(config.api.root)
-      .register(app)
-      .then(() => console.log('Finished API Registration '));
+    let api = new Api(config.api.root);
+    let statics = new Statics(config.paths.client);
 
-    // Register auth routes
-
-    // Register static routes
-
-    return Promise
-      .all([api])
-      .then(() => console.log('all routes registered'))
+    let chain = api.register(app)
+      .then((name: string) => {
+        onRegistered(name);
+        return statics.register(app);
+      })
+      .then((name: string) => {
+        onRegistered(name);
+      })
       .catch(registerErrorHandler);
+
+    return chain
+      .then(() => console.log('Registered all routes'));
   }
+}
+
+/**
+ * Called when an route has finished registering
+ * @param {String}  name  Name of the route
+ */
+function onRegistered(name: string) {
+  // TODO handle this?
+  console.log('Finished registering [' + name + ']');
 }
 
 /**

@@ -43,8 +43,7 @@ let _config: any = {
    * types: console, file, json, none
    */
   log: {
-    type: 'console',
-    levels: <string[]>['VERBOSE', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'LOG'],
+    path: './logs',
     level: <string>'INFO',
     short: <boolean>false,
     default: <string>'INFO'

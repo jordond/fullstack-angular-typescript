@@ -8,10 +8,21 @@ const moment = (_moment as any).default;
  * Contains the base options used by the logger base class
  */
 export interface ILoggerOptions {
+  type?: string;
   level?: string;
   levels?: string[];
   shorten?: boolean;
   default?: string;
+}
+
+/**
+ * Logger.ILogItem
+ * Contains the elements that make up a console output
+ */
+export interface ILogItem {
+  level: string;
+  message: string;
+  data: any;
 }
 
 /**
@@ -27,16 +38,13 @@ export default class Base {
 
   constructor(tag: string, options?: ILoggerOptions) {
     options = options || {};
-    let levels = options.levels || ['VERBOSE', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'LOG'];
+    let levels = ['VERBOSE', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'LOG'];
 
     this._tag = tag;
     this._options.level = options.level || 'LEVEL';
-    this._options.levels = options.levels || levels;
+    this._options.levels = levels;
     this._options.shorten = options.shorten || false;
     this._options.default = options.default || 'INFO';
-
-    // In case the passed in levels are not all uppercase
-    this._options.levels = levels.map((item) => item.toUpperCase());
 
     this._levelsMaxLength = levelsLength(this._options.levels).length;
   }
@@ -92,6 +100,21 @@ export default class Base {
       level = level.toUpperCase().slice(0, this._levelsMaxLength);
     }
     return '[' + level + '][' + tag + ']';
+  }
+
+  /**
+  * Implement the ILogItem interface
+  * @param {string}  level desired output level
+  * @param {string}  message contents of log item
+  * @param {Object}  data (optional) additional data to output to console
+  * @returns {ILogItem} container holding level, message and data
+  */
+  createLogItem(level: string, message: string, data?: any): ILogItem {
+    return {
+      level: level,
+      message: message,
+      data: data || ''
+    };
   }
 
   timestamp(): string {

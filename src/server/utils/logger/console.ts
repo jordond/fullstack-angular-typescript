@@ -4,17 +4,7 @@
 import * as _chalk from 'chalk';
 const chalk = (_chalk as any).default;
 
-import { default as Base, ILoggerOptions } from './base';
-
-/**
- * Logger.Console.IConsoleItem
- * Contains the elements that make up a console output
- */
-export interface IConsoleItem {
-  level: string;
-  message: string;
-  data: any;
-}
+import { default as Base, ILoggerOptions, ILogItem } from './base';
 
 /**
  * Logger.Console.IConsoleColors
@@ -37,11 +27,11 @@ export default class Console extends Base {
 
   /**
    * Do the heavy lifting and output the item to the console
-   * @param {IConsoleItem}    item    Object containing console info
+   * @param {ILogItem}    item    Object containing console info
    * @param {IConsoleColors}  colors  output using chalk colors
    * @param {Boolean}         force (optional) always output to console
    */
-  private toConsole(item: IConsoleItem, colors?: IConsoleColors, force?: boolean): void {
+  private toConsole(item: ILogItem, colors?: IConsoleColors, force?: boolean): void {
     if (this.shouldLog(item.level) || force) {
       let header: string = this.formatHeader(item.level, this.tag);
       item.data = item.data || '';
@@ -77,7 +67,7 @@ export default class Console extends Base {
    */
   log(message: string, data?: any): void {
     let colors = createColor(chalk.green);
-    this.toConsole(createConsoleItem('LOG', message, data), colors);
+    this.toConsole(this.createLogItem('LOG', message, data), colors);
   }
 
   /**
@@ -88,7 +78,7 @@ export default class Console extends Base {
    */
   error(message: string, data?: any): void {
     let colors = createColor(chalk.bold.bgRed, chalk.bold.red);
-    this.toConsole(createConsoleItem('ERROR', message, data), colors, true);
+    this.toConsole(this.createLogItem('ERROR', message, data), colors, true);
   }
 
   /**
@@ -98,7 +88,7 @@ export default class Console extends Base {
    */
   warning(message: string, data?: any): void {
     let colors = createColor(chalk.bold.bgYellow, chalk.bold.yellow);
-    this.toConsole(createConsoleItem('WARNING', message, data), colors);
+    this.toConsole(this.createLogItem('WARNING', message, data), colors);
   }
 
   /**
@@ -108,7 +98,7 @@ export default class Console extends Base {
    */
   info(message: string, data?: any): void {
     let colors = createColor(chalk.cyan);
-    this.toConsole(createConsoleItem('INFO', message, data), colors);
+    this.toConsole(this.createLogItem('INFO', message, data), colors);
   }
 
   /**
@@ -118,7 +108,7 @@ export default class Console extends Base {
    */
   debug(message: string, data?: any): void {
     let colors = createColor(chalk.magenta);
-    this.toConsole(createConsoleItem('DEBUG', message, data), colors);
+    this.toConsole(this.createLogItem('DEBUG', message, data), colors);
   }
 
   /**
@@ -128,29 +118,10 @@ export default class Console extends Base {
    */
   verbose(message: string, data?: any): void {
     let colors = createColor(chalk.gray);
-    this.toConsole(createConsoleItem('VERBOSE', message, data), colors);
+    this.toConsole(this.createLogItem('VERBOSE', message, data), colors);
   }
 
 } // End of Logger.Console
-
-/**
- * Private Helpers
- */
-
-/**
- * Implement the IConsoleItem interface
- * @param {string}  level desired output level
- * @param {string}  message contents of log item
- * @param {Object}  data (optional) additional data to output to console
- * @returns {IConsoleItem} container holding level, message and data
- */
-function createConsoleItem(level: string, message: string, data?: any): IConsoleItem {
-  return {
-    level: level,
-    message: message,
-    data: data || ''
-  };
-}
 
 /**
  * Implements the IConsoleColors interface

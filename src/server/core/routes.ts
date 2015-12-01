@@ -13,13 +13,16 @@ export default class Routes {
    */
   static init(app: any, router: any) {
     var _promise = (resolve: Function, reject: Function ) => {
-      for (let route of apiRoutes) {
-        new route().init(router);
+      try {
+        for (let route of apiRoutes) {
+          new route().init(router);
+        }
+        // Add all routes to the application
+        app.use('/', router);
+        resolve();
+      } catch (err) {
+        reject(err);
       }
-
-      // Add all routes to the application
-      app.use('/', router);
-      resolve();
     };
 
     return new Promise(_promise);

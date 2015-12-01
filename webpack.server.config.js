@@ -27,6 +27,12 @@ module.exports = {
   },
   externals: nodeModules,
   module: {
+    preLoaders: [
+      {
+        test: /\.ts$/,
+        loader: "tslint"
+      }
+    ],
     loaders: [{
       test: /\.ts$/,
       exclude: /(node_modules)/,

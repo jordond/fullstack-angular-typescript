@@ -20,3 +20,9 @@ declare module Config {
     secrets?: ISecrets;
   }
 }
+
+declare module Route {
+  interface IApiRoute {
+    init: (router: any) => void;
+  }
+}

@@ -17,10 +17,9 @@ var colors = $.util.colors;
 gulp.task('nodemon', false, function () {
   var debugMode;
   if (args.debugBrk) {
-    // node-demon doesn't accept this?
-    debugMode = 'node --debug-brk';
+    debugMode = '--debug-brk';
   } else {
-    debugMode = 'node --debug';
+    debugMode = '--debug';
   }
 
   var nodeOptions = {
@@ -29,6 +28,7 @@ gulp.task('nodemon', false, function () {
       'PORT': args.port || conf.server.port || 9000,
       'NODE_ENV': args.env || conf.server.env || 'development'
     },
+    nodeArgs: [debugMode],
     execMap: {
       'js': debugMode || 'node'
     },

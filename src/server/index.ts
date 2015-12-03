@@ -39,6 +39,8 @@ function init(config: Config.IConfig) {
   let timer = new ExecutionTimer();
 
   log.info('Initializing server instance');
+  log.debug('Using following config: ', config);
+
   new App(config)
     .init()
     .then(() => {

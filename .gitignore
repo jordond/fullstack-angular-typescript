@@ -16,3 +16,6 @@ Icon?
 Thumbs.db
 
 typings
+
+# Configuration file
+src/config.json

@@ -26,13 +26,14 @@ export default class Console extends Base {
   private toConsole(item: Logger.ILogItem, colors?: Logger.IConsoleColors, force?: boolean): void {
     if (this.shouldLog(item.level) || force) {
       let header: string = this.formatHeader(item.level, this.tag);
+      let newLine = (item.data !== null && typeof item.data === 'object') ? '\n' : '';
       item.data = item.data || '';
       if (colors === null) {
-        console.log(chalk.gray(this.timestamp()) + header + ' ' + item.message, item.data);
+        console.log(chalk.gray(this.timestamp()) + header + ' ' + item.message + newLine, item.data);
       } else {
         console.log(chalk.gray(this.timestamp())
           + colors.level(header)
-          + colors.message(' ' + item.message), item.data);
+          + colors.message(' ' + item.message) + newLine, item.data);
       }
       if (!logToFile(item)) {
         console.log(chalk.gray(this.timestamp()) + chalk.yellow(' WARNING Could not log to file!'));

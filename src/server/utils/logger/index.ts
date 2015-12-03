@@ -14,7 +14,9 @@ let _loggerConfig: Logger.IConfig;
  * @param {Logger.IConfig} config Logger specific configuration
  */
 export function init(config: Logger.IConfig) {
-  let log = new Console('Logger');
+  let log = new Console('Logger', { level: 'DEBUG'} );
+  log.debug('Logger config: ', config);
+
   config.path = path.join(__dirname, config.path || './logs');
   config.filename = config.filename || 'logger.log';
   mkdirp.sync(config.path);

@@ -80,7 +80,7 @@ let _config: Config.IConfig = {
 export default function init(config: any, environment?: string): any {
   let env = environment || config.env || _config.env;
   let environmentConfig = env === 'production' ? prod : dev;
-  _config = _.assign(_config, environmentConfig || {}, config || {});
+  _config = _.merge(_config, environmentConfig || {}, config || {});
 
   return _config;
 }

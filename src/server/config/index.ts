@@ -45,6 +45,7 @@ let _config: Config.IConfig = {
    */
   log: {
     path: './logs',
+    filename: 'server.log',
     level: <string>'INFO',
     short: <boolean>false,
     default: <string>'INFO'

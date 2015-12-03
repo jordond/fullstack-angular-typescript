@@ -25,6 +25,7 @@ export class ExecutionTimer {
 
   /**
    * Set a new percision
+   * @param {number}  percision Number of decimal places to output
    */
   set percision(percision: number) {
     this._percision = percision;

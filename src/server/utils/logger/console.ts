@@ -4,16 +4,8 @@
 import * as _chalk from 'chalk';
 const chalk = (_chalk as any).default;
 
-import { default as Base, ILoggerOptions, ILogItem } from './base';
-
-/**
- * Logger.Console.IConsoleColors
- * Contains the colors for the console output
- */
-export interface IConsoleColors {
-  level: any;
-  message: any;
-}
+import Base from './base';
+import { log as logToFile } from './file';
 
 /**
  * Logger.Console
@@ -21,7 +13,7 @@ export interface IConsoleColors {
  * Handles the outputting of information to the console
  */
 export default class Console extends Base {
-  constructor(tag: string, options?: ILoggerOptions) {
+  constructor(tag: string, options?: Logger.IConfig) {
     super(tag, options);
   }
 
@@ -31,7 +23,7 @@ export default class Console extends Base {
    * @param {IConsoleColors}  colors  output using chalk colors
    * @param {Boolean}         force (optional) always output to console
    */
-  private toConsole(item: ILogItem, colors?: IConsoleColors, force?: boolean): void {
+  private toConsole(item: Logger.ILogItem, colors?: Logger.IConsoleColors, force?: boolean): void {
     if (this.shouldLog(item.level) || force) {
       let header: string = this.formatHeader(item.level, this.tag);
       item.data = item.data || '';
@@ -41,6 +33,9 @@ export default class Console extends Base {
         console.log(chalk.gray(this.timestamp())
           + colors.level(header)
           + colors.message(' ' + item.message), item.data);
+      }
+      if (!logToFile(item)) {
+        console.log(chalk.gray(this.timestamp()) + chalk.yellow(' WARNING Could not log to file!'));
       }
     }
   }
@@ -61,16 +56,6 @@ export default class Console extends Base {
   }
 
   /**
-   * Lowest level of logging outputs as green
-   * @param {string}  message Content to output
-   * @param {any}     data    Extra info to pass to console
-   */
-  log(message: string, data?: any): void {
-    let colors = createColor(chalk.green);
-    this.toConsole(this.createLogItem('LOG', message, data), colors);
-  }
-
-  /**
    * When something has gone wrong
    * Always pass 'true' to {this.toConsole}, so that it is always outputted
    * @param {string}  message Content to output
@@ -88,7 +73,7 @@ export default class Console extends Base {
    */
   warning(message: string, data?: any): void {
     let colors = createColor(chalk.bold.bgYellow, chalk.bold.yellow);
-    this.toConsole(this.createLogItem('WARNING', message, data), colors);
+    this.toConsole(this.createLogItem('WARN', message, data), colors);
   }
 
   /**
@@ -102,23 +87,33 @@ export default class Console extends Base {
   }
 
   /**
-   * Non-important information
-   * @param {string}  message Content to output
-   * @param {any}     data    Extra info to pass to console
-   */
-  debug(message: string, data?: any): void {
-    let colors = createColor(chalk.magenta);
-    this.toConsole(this.createLogItem('DEBUG', message, data), colors);
-  }
-
-  /**
-   * Highest level of verbosity, has the most output
+   * Extra information
    * @param {string}  message Content to output
    * @param {any}     data    Extra info to pass to console
    */
   verbose(message: string, data?: any): void {
-    let colors = createColor(chalk.gray);
+    let colors = createColor(chalk.magenta);
     this.toConsole(this.createLogItem('VERBOSE', message, data), colors);
+  }
+
+  /**
+   * Debug level information
+   * @param {string}  message Content to output
+   * @param {any}     data    Extra info to pass to console
+   */
+  debug(message: string, data?: any): void {
+    let colors = createColor(chalk.gray);
+    this.toConsole(this.createLogItem('DEBUG', message, data), colors);
+  }
+
+  /**
+   * All silly things to be outputted
+   * @param {string}  message Content to output
+   * @param {any}     data    Extra info to pass to console
+   */
+  silly(message: string, data?: any): void {
+    let colors = createColor(chalk.pink);
+    this.toConsole(this.createLogItem('SILLY', message, data), colors);
   }
 
 } // End of Logger.Console
@@ -129,7 +124,7 @@ export default class Console extends Base {
  * @param {Chalk.ChalkStyle}  message (optional) color object for message
  * @returns {IConsoleColors}  container of color objects
  */
-function createColor(level: any, message?: any): IConsoleColors {
+function createColor(level: any, message?: any): Logger.IConsoleColors {
   return {
     level: level,
     message: message || level

@@ -27,7 +27,7 @@
       "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
     },
     "node/node.d.ts": {
-      "commit": "0ea013a775ce1fb90c5e41b255e1d038714ffbe5"
+      "commit": "715df764419937a75a25dcd76bfc954157bc7b96"
     },
     "assertion-error/assertion-error.d.ts": {
       "commit": "fc341765ebbb04b7109981a25dced01f488f4d94"
@@ -91,6 +91,12 @@
     },
     "yargs/yargs.d.ts": {
       "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
+    },
+    "winston/winston.d.ts": {
+      "commit": "715df764419937a75a25dcd76bfc954157bc7b96"
+    },
+    "mkdirp/mkdirp.d.ts": {
+      "commit": "78d36dd49b6b55b9fdfe61776a12bf05c8b07777"
     }
   }
 }

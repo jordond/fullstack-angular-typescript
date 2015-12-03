@@ -38,10 +38,10 @@ export default class Base {
 
   constructor(tag: string, options?: ILoggerOptions) {
     options = options || {};
-    let levels = ['VERBOSE', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'LOG'];
+    let levels = ['ERROR', 'WARN', 'INFO', 'VERBOSE', 'DEBUG', 'SILLY'];
 
     this._tag = tag;
-    this._options.level = options.level || 'LEVEL';
+    this._options.level = options.level || 'INFO';
     this._options.levels = levels;
     this._options.shorten = options.shorten || false;
     this._options.default = options.default || 'INFO';
@@ -76,7 +76,7 @@ export default class Base {
     let level: string = this._options.level.toUpperCase();
     let levelIdx: number = this._options.levels.indexOf(level);
     let outIdx: number = this._options.levels.indexOf(outLevel);
-    if (outIdx >= levelIdx && levelIdx !== -1) {
+    if (levelIdx >= outIdx && levelIdx !== -1) {
       return true;
     } else if (levelIdx === -1) {
       return outIdx >= this._options.levels.indexOf(this._options.default.toUpperCase());

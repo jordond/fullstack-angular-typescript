@@ -1,4 +1,5 @@
 /// <reference path="../../typings/tsd.d.ts" />
+/// <reference path="./utils/logger/logger.d.ts" />
 
 declare module Config {
   interface IPaths {
@@ -7,14 +8,6 @@ declare module Config {
     server: string;
     webDir?: string;
   }
-
-  interface ILoggerConfig {
-    path?: string;
-    level?: string;
-    short?: boolean;
-    default?: string;
-  }
-
 
   interface ISecrets {
     session: string;
@@ -29,7 +22,7 @@ declare module Config {
     env?: string;
     paths?: IPaths;
     port?: number;
-    log?: ILoggerConfig;
+    log?: Logger.IConfig;
     secrets?: ISecrets;
     api?: IApi;
   }

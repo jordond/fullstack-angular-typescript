@@ -1,51 +1,41 @@
+/// <reference path="./logger.d.ts" />
 'use strict';
 
-import * as fs from 'fs';
+import * as path from 'path';
+import * as mkdirp from 'mkdirp';
 
-import { default as Base, ILoggerOptions } from './base';
+import { init as initWinston } from './file';
 import Console from './console';
-import File from './file';
 
-let _config: Config.ILoggerConfig;
-let _log: Console;
+let _loggerConfig: Logger.IConfig;
 
-export function init(config: Config.ILoggerConfig): void {
-  _log = new Console('Logger');
-  _config = config;
-  _config.path = _config.path || './logs';
-  if (createLogDir(_config.path)) {
-    _log.log('Using [' + _config.path + '] for log files');
-  }
+/**
+ * Initialize the logger with configuration
+ * @param {Logger.IConfig} config Logger specific configuration
+ */
+export function init(config: Logger.IConfig) {
+  let log = new Console('Logger');
+  config.path = path.join(__dirname, config.path || './logs');
+  config.filename = config.filename || 'logger.log';
+  mkdirp.sync(config.path);
+
+  initWinston(config).then(() => {
+    log.info('Initialized logger with level of [' + config.level + ']');
+    log.info('Using [' + path.resolve(config.path, config.filename) + ']');
+  });
+
+  _loggerConfig = config;
+
+  return Promise.resolve();
 }
 
-class Logger {
-  _console: Console;
-  _file: File;
-
-  constructor(tag: string, options?: ILoggerOptions) {
-    this._console = new Console(tag, options);
-    this._file = new File(tag, _config.path, options);
-  }
-
-  get console() {
-    return this._console;
-  }
-
-  get file() {
-    return this._file;
-  }
-}
-
-export default Logger;
-
-function createLogDir(path: string): boolean {
-  try {
-    if (!fs.statSync(path)) {
-      fs.mkdirSync(path);
-    }
-    return !!fs.statSync(path);
-  } catch (err) {
-    _log.error('Could not create log directory [' + path + ']', err);
-    return false
-  }
+/**
+ * Create a new logger instance, with global options
+ * or user supplied options
+ * @param {string}  tag Tag for the console
+ * @param {IConfig} config  (optional) Configuartion for the logger
+ * @return Console logger object
+ */
+export function create(tag: string, config?: Logger.IConfig): Console {
+  return new Console(tag, config || _loggerConfig);
 }

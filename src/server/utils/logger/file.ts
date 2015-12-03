@@ -1,62 +1,37 @@
 'use strict';
 
+import { join } from 'path';
+import * as winston from 'winston';
 
-import { default as Base, ILoggerOptions, ILogItem } from './base';
+const MEGABYTE = 1000 * 1000;
 
-export default class File extends Base {
-  _path: string;
-  _filename: string;
+let _wasInit = false;
+let _winstonInstance = winston;
 
-  constructor(tag: string, path?: string, options?: ILoggerOptions) {
-    super(tag, options);
-    this._path = path || './logs';
-  }
+export function init(config: Logger.IConfig) {
+  let winstonOptions = {
+    level: config.level.toLowerCase(),
+    filename: join(config.path, config.filename),
+    maxsize: 50 * MEGABYTE,
+    maxFiles: 3,
+    handleExceptions: true,
+    humanReadableUnhandledException: true
+  };
+  _winstonInstance.add(winston.transports.File, winstonOptions);
+  _winstonInstance.remove(winston.transports.Console);
+  _wasInit = true;
 
-  log(message: string, data?: any): void {
-    let item = this.createLogItem('LOG', message, data);
-    this.write(toJson(item));
-  }
-
-  error(message: string, data?: any): void {
-    let item = this.createLogItem('ERROR', message, data);
-    this.write(toJson(item), true);
-  }
-
-  warning(message: string, data?: any): void {
-    let item = this.createLogItem('WARNING', message, data);
-    this.write(toJson(item));
-  }
-
-  info(message: string, data?: any): void {
-    let item = this.createLogItem('INFO', message, data);
-    this.write(toJson(item));
-  }
-
-  debug(message: string, data?: any): void {
-    let item = this.createLogItem('DEBUG', message, data);
-    this.write(toJson(item));
-  }
-
-  verbose(message: string, data?: any): void {
-    let item = this.createLogItem('VERBOSE', message, data);
-    this.write(toJson(item));
-  }
-
-  write(json: string, force?: boolean) {
-
-  }
+  return Promise.resolve();
 }
 
 /**
- * Convert the Log item into a json object
- * @param {ILogItem}  item  Contents of log object
- * @returns {String}  JSON string of log object
+ * Log the item to the specified log file
+ * @param {ILogItem} item Contains level, message, and data
+ * @returns {boolean} Whether or not it was logged
  */
-function toJson(item: ILogItem): string {
-  let output = {
-    date: Date.now(),
-    dateFormatted: this.timestamp(),
-    item: item
+export function log(item: Logger.ILogItem): boolean {
+  if (_wasInit) {
+    _winstonInstance.log(item.level.toLowerCase(), item.message, item.data);
   }
-  return JSON.stringify(output);
+  return _wasInit;
 }

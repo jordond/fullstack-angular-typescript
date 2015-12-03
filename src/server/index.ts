@@ -11,7 +11,7 @@ import Config from './config/index';
 import App from './core/app';
 
 import { ExecutionTimer } from './utils/execution';
-import Logger from './utils/logger/console';
+import * as Logger from './utils/logger/index';
 
 /**
  * Load the configuration either from the default path
@@ -21,7 +21,7 @@ import Logger from './utils/logger/console';
 let userConfigPath: string = (args.c || args.config) || path.join(__dirname, '../config.json');
 fs.readFile(userConfigPath, (err: any, data: any) => {
   if (err) {
-    let log = new Logger('App');
+    let log = Logger.create('App');
     log.error('Config file [' + userConfigPath + '] not found, exiting.');
     process.exit(1);
   }
@@ -34,14 +34,15 @@ fs.readFile(userConfigPath, (err: any, data: any) => {
  * @param {Config.IConfig}  config  Merged configuration object
  */
 function init(config: Config.IConfig) {
-  let log = new Logger('App', config.log);
+  Logger.init(config.log);
+  let log = Logger.create('App');
   let timer = new ExecutionTimer();
 
-  log.log('Initializing server instance');
+  log.info('Initializing server instance');
   new App(config)
     .init()
     .then(() => {
-      log.log('Server initialized');
+      log.info('Server initialized');
       log.info('Initialization time [' + timer.toString() + ']');
     })
     .catch(failed);

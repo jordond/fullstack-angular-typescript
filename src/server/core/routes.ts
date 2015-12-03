@@ -2,8 +2,11 @@
 
 import * as express from 'express';
 
+import { create } from '../utils/logger/index';
 import Api from '../routes/api/index';
 import Statics from '../routes/static/index';
+
+let _log: Logger.Console;
 
 export default class Routes {
   /**
@@ -16,6 +19,8 @@ export default class Routes {
    */
   static init(app: any, config: Config.IConfig) {
     let _router = express.Router();
+    _log = create('Routes');
+    _log.info('Registering [Api, Statics] components');
 
     let api = new Api(config.api.root);
     let statics = new Statics(config.paths.client);
@@ -31,7 +36,7 @@ export default class Routes {
       .catch(registerErrorHandler);
 
     return chain
-      .then(() => console.log('Registered all routes'));
+      .then(() => _log.info('Finished registering all route components'));
   }
 }
 
@@ -41,7 +46,7 @@ export default class Routes {
  */
 function onRegistered(name: string) {
   // TODO handle this?
-  console.log('Finished registering [' + name + ']');
+  _log.verbose('Finished registering [' + name + ']');
 }
 
 /**
@@ -52,6 +57,6 @@ function onRegistered(name: string) {
  * @throws {Object} Error object from exception
  */
 function registerErrorHandler(err: Route.IRouterError) {
-  console.log('Error register route [' + err.name + ']');
+  _log.error('Error register route [' + err.name + ']', err);
   throw err;
 }

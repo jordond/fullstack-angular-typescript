@@ -38,6 +38,6 @@ export function init(config: Logger.IConfig) {
  * @param {IConfig} config  (optional) Configuartion for the logger
  * @return Console logger object
  */
-export function create(tag: string, config?: Logger.IConfig): Console {
+export function create(tag: string, config?: Logger.IConfig): Logger.Console {
   return new Console(tag, config || _loggerConfig);
 }

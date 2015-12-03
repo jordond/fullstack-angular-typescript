@@ -35,7 +35,7 @@ declare module Logger {
   class Console {
     constructor(tag: string, options?: IConfig);
 
-    private toConsole(item: ILogItem, colors?: IConsoleColors, force?: boolean): void;
+    toConsole(item: ILogItem, colors?: IConsoleColors, force?: boolean): void;
     public out(message: string, data?: any, force?: boolean): void;
 
     error(message: string, data?: any): void;
@@ -45,5 +45,8 @@ declare module Logger {
     debug(message: string, data?: any): void;
     silly(message: string, data?: any): void;
   }
+
+  function init(config: IConfig): PromiseLike<any>;
+  function create(tag: string, config?: IConfig): Console;
 
 }

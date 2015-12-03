@@ -2,7 +2,10 @@
 
 import * as express from 'express';
 
+import { create } from '../../utils/logger/index';
 import endpoints from './endpoints';
+
+let _log: Logger.Console;
 
 /**
  * A Class to handle all of the API specific routing for the
@@ -20,6 +23,7 @@ export default class Api {
     this._router = express.Router();
     this._pomises = [];
     this._path = path;
+    _log = create('Api');
   }
 
   get router() {
@@ -32,15 +36,15 @@ export default class Api {
    */
   register(app: express.Application) {
     let currentEndpoint = 'Unknown';
+    _log.info('Attempting to register [' + endpoints.length + '] endpoints');
     try {
       // Register all the endpoints
       for (let Endpoint of endpoints) {
         let endpoint = new Endpoint();
         currentEndpoint = endpoint.name;
 
-        let p = endpoint
-          .register(this._router)
-          .then((name: string) => { console.log('registered: ' + name); });
+        let p = endpoint.register(this._router);
+        _log.verbose('Registered endpoint [' + currentEndpoint + ']');
         this._pomises.push(p);
       }
     } catch (error) {
@@ -56,6 +60,7 @@ export default class Api {
       this._router.route('/').all(apiBaseHandler);
       this._router.route('/*').all(invalidApiHandler);
       app.use(this._path, this._router);
+      _log.info('Finished registering all endpoints');
       return 'Api';
     };
 

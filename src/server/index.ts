@@ -21,12 +21,13 @@ import * as Logger from './utils/logger/index';
 let userConfigPath: string = (args.c || args.config) || path.join(__dirname, '../config.json');
 fs.readFile(userConfigPath, (err: any, data: any) => {
   if (err) {
-    let log = Logger.create('App');
+    let log = Logger.create('Init');
     log.error('Config file [' + userConfigPath + '] not found, exiting.');
     process.exit(1);
   }
   let config = Config(JSON.parse(data));
-  init(<Config.IConfig>config);
+  Logger.init(config.log)
+    .then(() => init(<Config.IConfig>config));
 });
 
 /**
@@ -34,8 +35,7 @@ fs.readFile(userConfigPath, (err: any, data: any) => {
  * @param {Config.IConfig}  config  Merged configuration object
  */
 function init(config: Config.IConfig) {
-  Logger.init(config.log);
-  let log = Logger.create('App');
+  let log = Logger.create('Init');
   let timer = new ExecutionTimer();
 
   log.info('Initializing server instance');

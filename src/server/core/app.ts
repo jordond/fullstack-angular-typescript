@@ -3,6 +3,7 @@
 import * as _express from 'express';
 const express = (_express as any).default;
 
+import { create } from '../utils/logger/index';
 import Routes from './routes';
 
 /**
@@ -30,15 +31,19 @@ export default class App {
    * final promise to inform of server initialization.
    */
   init() {
+    let log = create('App');
     let _promise = (resolve: Function, reject: Function) => {
       let componentPromises = [
         Routes.init(this._app, this._config)
+        // Express settings
+        // Database?
+        // Sockets?
       ];
 
       Promise
         .all(componentPromises)
         .then(() => {
-          console.log('bootstrapping done');
+          log.info('All tasks have been bootstrapped');
           this._app.listen(9000, () => resolve());
         })
         .catch((err) => reject(err));

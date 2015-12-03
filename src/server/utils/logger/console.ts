@@ -23,7 +23,7 @@ export default class Console extends Base {
    * @param {IConsoleColors}  colors  output using chalk colors
    * @param {Boolean}         force (optional) always output to console
    */
-  private toConsole(item: Logger.ILogItem, colors?: Logger.IConsoleColors, force?: boolean): void {
+  toConsole(item: Logger.ILogItem, colors?: Logger.IConsoleColors, force?: boolean): void {
     if (this.shouldLog(item.level) || force) {
       let header: string = this.formatHeader(item.level, this.tag);
       let newLine = (item.data !== null && typeof item.data === 'object') ? '\n' : '';

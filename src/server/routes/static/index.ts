@@ -1,7 +1,7 @@
 'use strict';
 
 import * as express from 'express';
-import { createReadStream as stream} from 'fs';
+import { createReadStream as stream } from 'fs';
 import { join } from 'path';
 
 export default class Statics {

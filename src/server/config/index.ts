@@ -16,13 +16,18 @@ import * as _ from 'lodash';
 
 import prod from './environments/production';
 import dev from './environments/development';
+import defaults from './protected';
 
 let _config: Config.IConfig = {
 
   /**
    * Environment to run server in
    */
-  env: process.env.NODE_ENV,
+  env: {
+    valid: ['production', 'development'],
+    default: 'development',
+    environment: <string>process.env.NODE_ENV
+  },
 
   /**
    * Server paths for express
@@ -72,7 +77,8 @@ let _config: Config.IConfig = {
 
 /**
  * Initialize the configuration and gather all config options into
- * a single config object
+ * a single config object. Merge in the protected defaults after user
+ * config has been loaded.
  * @param   {Object}  config      User config.json file
  * @param   {String}  environment Decide which environment configuration to use
  * @returns {Object}  Combined configuration file. (defaults, environment, user)
@@ -80,7 +86,7 @@ let _config: Config.IConfig = {
 export default function init(config: any, environment?: string): any {
   let env = environment || config.env || _config.env;
   let environmentConfig = env === 'production' ? prod : dev;
-  _config = _.merge(_config, environmentConfig || {}, config || {});
+  _config = _.merge(_config, environmentConfig || {}, config || {}, defaults);
 
   return _config;
 }

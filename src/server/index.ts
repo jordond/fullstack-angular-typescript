@@ -9,15 +9,32 @@ import { argv as args } from 'yargs';
 
 import Config from './config/index';
 import App from './core/app';
+import Exit from './core/exit';
 
-import { ExecutionTimer } from './utils/execution';
+import { ExecutionTimer, Uptime } from './utils/execution';
 import * as Logger from './utils/logger/index';
+
+let _uptime = new Uptime();
+
+/**
+ * POC for now
+ */
+Exit((exitCode: number) => {
+  let log = Logger.create('Report');
+  if (exitCode !== 0) {
+    log.warning('Server is exiting with a non-zero code [' + exitCode + ']');
+  } else {
+    log.info('Server is exiting cleanly');
+  }
+  log.info('Server was running for [' + _uptime.toString() + ']');
+  log.verbose('Server Start [' + _uptime.prettyDate(_uptime.Start) + ']');
+  log.verbose('Percise server uptime [' + _uptime.Timer.toString() + ']');
+});
 
 /**
  * Load the configuration either from the default path
  * or from the command line
  */
-
 let userConfigPath: string = (args.c || args.config) || path.join(__dirname, '../config.json');
 fs.readFile(userConfigPath, (err: any, data: any) => {
   if (err) {
@@ -27,7 +44,8 @@ fs.readFile(userConfigPath, (err: any, data: any) => {
   }
   let config = Config(JSON.parse(data));
   Logger.init(config.log)
-    .then(() => init(<Config.IConfig>config));
+    .then(() => init(<Config.IConfig>config))
+    .catch(failed);
 });
 
 /**
@@ -48,9 +66,13 @@ function init(config: Config.IConfig) {
       log.info('Initialization time [' + timer.toString() + ']');
     })
     .catch(failed);
+}
 
-  function failed(err: any) {
-    log.error('Server init failed', err);
-    process.exit(1);
+function failed(err: any) {
+  let log = Logger.create('App');
+  log.error('Server encountered a problem', err);
+  if (err.stack) {
+    log.error('Stack:', err.stack);
   }
+  process.exit(1);
 }

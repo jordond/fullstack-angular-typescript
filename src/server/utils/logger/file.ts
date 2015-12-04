@@ -13,9 +13,7 @@ export function init(config: Logger.IConfig) {
     level: config.level.toLowerCase(),
     filename: join(config.path, config.filename),
     maxsize: 50 * MEGABYTE,
-    maxFiles: 3,
-    handleExceptions: true,
-    humanReadableUnhandledException: true
+    maxFiles: 3
   };
   _winstonInstance.add(winston.transports.File, winstonOptions);
   _winstonInstance.remove(winston.transports.Console);

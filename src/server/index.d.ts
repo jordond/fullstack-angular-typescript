@@ -18,13 +18,25 @@ declare module Config {
     secure?: boolean;
   }
 
+  interface IEnvironment {
+    valid?: string[];
+    default?: string;
+    environment?: string;
+  }
+
   interface IConfig {
-    env?: string;
+    env?: IEnvironment;
     paths?: IPaths;
     port?: number;
     log?: Logger.IConfig;
     secrets?: ISecrets;
     api?: IApi;
+  }
+}
+
+declare module Core {
+  interface Component {
+    init(app: any, config: Config.IConfig): Promise<void> | Promise<{}>;
   }
 }
 

@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "install": "npm install",
+    "install": "tsd install",
     "vet": "gulp vet",
     "dev": "gulp dev",
     "debug": "gulp dev --debug",
@@ -83,9 +83,9 @@
     "source-map-support": "^0.3.3",
     "style-loader": "^0.13.0",
     "ts-loader": "^0.7.2",
-    "tslint": "^3.0.0",
+    "tslint": "^3.1.1",
     "tslint-loader": "^2.1.0",
-    "typescript": "^1.6.2",
+    "typescript": "^1.7.3",
     "webpack": "^1.12.8",
     "wrench": "^1.5.8"
   }

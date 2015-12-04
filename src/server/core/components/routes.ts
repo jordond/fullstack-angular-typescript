@@ -2,13 +2,13 @@
 
 import * as express from 'express';
 
-import { create } from '../utils/logger/index';
-import Api from '../routes/api/index';
-import Statics from '../routes/static/index';
+import { create } from '../../utils/logger/index';
+import Api from '../../routes/api/index';
+import Statics from '../../routes/static/index';
 
 let _log: Logger.Console;
 
-export default class Routes {
+export default class Routes implements Core.Component {
   /**
    * Initialize the Router component
    * Load all api routes and then setup
@@ -17,7 +17,7 @@ export default class Routes {
    * @param {Express.Router}      router  Express router object
    * @returns {Promise} resolve when all routes are loaded
    */
-  static init(app: any, config: Config.IConfig) {
+  init(app: any, config: Config.IConfig) {
     let _router = express.Router();
     _log = create('Routes');
     _log.info('Registering [Api, Statics] components');

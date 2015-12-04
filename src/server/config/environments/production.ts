@@ -4,7 +4,7 @@
 
 'use strict';
 
-export default {
+export default <Config.IConfig>{
   port: process.env.PORT || 80,
 
   log: {

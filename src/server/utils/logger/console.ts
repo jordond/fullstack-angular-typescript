@@ -35,7 +35,7 @@ export default class Console extends Base {
           + colors.level(header)
           + colors.message(' ' + item.message) + newLine, item.data);
       }
-      logToFile(item)
+      logToFile(item);
     }
   }
 

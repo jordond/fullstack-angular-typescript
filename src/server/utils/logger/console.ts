@@ -35,9 +35,7 @@ export default class Console extends Base {
           + colors.level(header)
           + colors.message(' ' + item.message) + newLine, item.data);
       }
-      if (!logToFile(item)) {
-        console.log(chalk.gray(this.timestamp()) + chalk.yellow(' WARNING Could not log to file!'));
-      }
+      logToFile(item)
     }
   }
 

@@ -14,19 +14,27 @@ let _loggerConfig: Logger.IConfig;
  * @param {Logger.IConfig} config Logger specific configuration
  */
 export function init(config: Logger.IConfig) {
-  let log = new Console('Logger', { level: 'DEBUG'} );
+  let log = new Console('Logger', config );
   log.debug('Logger config: ', config);
 
   config.path = path.join(__dirname, config.path || './logs');
   config.filename = config.filename || 'logger.log';
   mkdirp.sync(config.path);
 
+  config.default = Console.validLevel(config.default) ? config.default.toUpperCase() : 'INFO';
+
+  let isValidLevel = Console.validLevel(config.level);
+  if (!isValidLevel) {
+    log.warning('Invalid log level [' + config.level.toUpperCase() + '] defaulting to [' + config.default + ']');
+  }
+  config.level = isValidLevel ? config.level.toUpperCase() : config.default;
+
+  _loggerConfig = config;
   initWinston(config).then(() => {
     log.info('Initialized logger with level of [' + config.level + ']');
     log.info('Using [' + path.resolve(config.path, config.filename) + ']');
   });
 
-  _loggerConfig = config;
 
   return Promise.resolve();
 }

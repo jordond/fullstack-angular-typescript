@@ -4,26 +4,9 @@ import * as _moment from 'moment';
 const moment = (_moment as any).default;
 
 /**
- * Logger.ILoggerOptions
- * Contains the base options used by the logger base class
+ * Available logging levels
  */
-export interface ILoggerOptions {
-  type?: string;
-  level?: string;
-  levels?: string[];
-  shorten?: boolean;
-  default?: string;
-}
-
-/**
- * Logger.ILogItem
- * Contains the elements that make up a console output
- */
-export interface ILogItem {
-  level: string;
-  message: string;
-  data: any;
-}
+const LOG_LEVELS = ['ERROR', 'WARN', 'INFO', 'VERBOSE', 'DEBUG', 'SILLY'];
 
 /**
  * Logger.Base
@@ -34,19 +17,19 @@ export default class Base {
 
   private _tag: string;
   private _levelsMaxLength: number;
-  private _options: ILoggerOptions = {};
+  private _options: Logger.IConfig = {};
+  private _levels: string[];
 
-  constructor(tag: string, options?: ILoggerOptions) {
+  constructor(tag: string, options?: Logger.IConfig) {
     options = options || {};
-    let levels = ['ERROR', 'WARN', 'INFO', 'VERBOSE', 'DEBUG', 'SILLY'];
 
     this._tag = tag;
-    this._options.level = options.level || 'INFO';
-    this._options.levels = levels;
-    this._options.shorten = options.shorten || false;
-    this._options.default = options.default || 'INFO';
+    this._options.default = Base.validLevel(options.default) ? options.default : 'INFO';
+    this._options.level = Base.validLevel(options.level) ? options.level : this._options.default;
+    this._options.short = options.short || false;
+    this._levels = LOG_LEVELS;
 
-    this._levelsMaxLength = levelsLength(this._options.levels).length;
+    this._levelsMaxLength = levelsLength(LOG_LEVELS).length;
   }
 
   /**
@@ -74,12 +57,12 @@ export default class Base {
   shouldLog(outLevel: string): boolean {
     outLevel = outLevel.trim().toUpperCase();
     let level: string = this._options.level.toUpperCase();
-    let levelIdx: number = this._options.levels.indexOf(level);
-    let outIdx: number = this._options.levels.indexOf(outLevel);
+    let levelIdx: number = this._levels.indexOf(level);
+    let outIdx: number = this._levels.indexOf(outLevel);
     if (levelIdx >= outIdx && levelIdx !== -1) {
       return true;
     } else if (levelIdx === -1) {
-      return outIdx >= this._options.levels.indexOf(this._options.default.toUpperCase());
+      return outIdx <= this._levels.indexOf(this._options.default.toUpperCase());
     }
     return false;
   }
@@ -91,7 +74,7 @@ export default class Base {
    * @returns {String}  formatted header
    */
   formatHeader(level: string, tag: string): string {
-    if (this._options.shorten) {
+    if (this._options.short) {
       level = level.charAt(0).toUpperCase();
     } else if (this._levelsMaxLength > level.length) {
       var diff = this._levelsMaxLength - level.length;
@@ -109,7 +92,7 @@ export default class Base {
   * @param {Object}  data (optional) additional data to output to console
   * @returns {ILogItem} container holding level, message and data
   */
-  createLogItem(level: string, message: string, data?: any): ILogItem {
+  createLogItem(level: string, message: string, data?: any): Logger.ILogItem {
     return {
       level: level,
       message: message,
@@ -117,8 +100,22 @@ export default class Base {
     };
   }
 
-  timestamp(): string {
-    return '[' + moment().format('YY/DD/MM|HH:mm:ss') + ']';
+  /**
+   * Get a nicely formated timestamp using moment()
+   * @param {string}  pattern (optional) Date format to use
+   * @return {string} A Formatted date timestamp
+   */
+  timestamp(pattern?: string): string {
+    return '[' + moment().format(pattern || 'YY/DD/MM|HH:mm:ss') + ']';
+  }
+
+  /**
+   * Check whether or not the desired level is valid
+   * @param {string}  desired Log level to be validated
+   * @return {boolean}  Whether or not level is valid
+   */
+  static validLevel(desired: string): boolean {
+    return LOG_LEVELS.indexOf(desired.toUpperCase()) !== -1;
   }
 
 } // End of Base

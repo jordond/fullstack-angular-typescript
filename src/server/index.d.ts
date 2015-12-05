@@ -24,6 +24,11 @@ declare module Config {
     environment?: string;
   }
 
+  interface ISocket {
+    path: string;
+    serveClient?: boolean;
+  }
+
   interface IConfig {
     env?: IEnvironment;
     paths?: IPaths;
@@ -31,6 +36,7 @@ declare module Config {
     log?: Logger.IConfig;
     secrets?: ISecrets;
     api?: IApi;
+    socket?: ISocket;
   }
 }
 

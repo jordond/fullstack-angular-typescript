@@ -70,7 +70,7 @@ function init(config: Config.IConfig) {
 
 function failed(err: any) {
   let log = Logger.create('App');
-  log.error('Server encountered a problem', err);
+  log.error('Server encountered a problem: ', err);
   if (err.stack) {
     log.error('Stack:', err.stack);
   }

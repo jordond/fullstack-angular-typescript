@@ -3,6 +3,7 @@
 import * as express from 'express';
 
 import { create } from '../../utils/logger/index';
+import { ExecutionTimer } from '../../utils/execution';
 import Api from '../../routes/api/index';
 import Statics from '../../routes/static/index';
 
@@ -18,6 +19,7 @@ export default class Routes implements Core.Component {
    * @returns {Promise} resolve when all routes are loaded
    */
   init(app: any, config: Config.IConfig) {
+    let timer = new ExecutionTimer();
     let _router = express.Router();
     _log = create('Routes');
     _log.info('Registering [Api, Statics] components');
@@ -36,7 +38,10 @@ export default class Routes implements Core.Component {
       .catch(registerErrorHandler);
 
     return chain
-      .then(() => _log.info('Finished registering all route components'));
+      .then(() => {
+        _log.info('Finished registering all route components');
+        _log.debug('Routes instantiation took ' + timer.toString());
+      });
   }
 }
 

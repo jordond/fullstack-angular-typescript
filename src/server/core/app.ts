@@ -6,6 +6,7 @@ const express = (_express as any).default;
 import { create } from '../utils/logger/index';
 import Routes from './components/routes';
 import Express from './components/express';
+import Sockets from './components/sockets';
 
 /**
  * Main server bootstrapper
@@ -40,17 +41,14 @@ export default class App {
 
       // Initialize app components and store promises
       let routes = new Routes().init(this._app, this._config);
-      let express = new Express()
+      let sockets = new Sockets();
+      let server = new Express()
         .init(this._app, this._config)
-        .then((server: any) => {
-          // setup socket server
-          // socket.init(app, config, server)?
-          // or .then(socket.init) - have express.init resolve app, config, server?
-        });
+        .then((server: any) => sockets.init(server, this._config));
 
       // Wait for all the component promises to resolve
       Promise
-        .all([routes, express])
+        .all([routes, server])
         .then(() => {
           log.info('Server bootstrapping has been completed');
           resolve();

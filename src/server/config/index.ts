@@ -71,6 +71,14 @@ let _config: Config.IConfig = {
   api: {
     root: '/api',
     secure: false // Not implemented
+  },
+
+  /**
+   * Socket.IO Configuration
+   */
+  socket: {
+    path: '/sync',
+    serveClient: false
   }
 
 };

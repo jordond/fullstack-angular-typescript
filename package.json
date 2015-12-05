@@ -42,6 +42,7 @@
     "morgan": "^1.6.1",
     "oclazyload": "^1.0.8",
     "serve-favicon": "^2.3.0",
+    "socket.io": "^1.3.7",
     "winston": "^2.1.1",
     "yargs": "^3.30.0"
   },
@@ -51,7 +52,6 @@
     "babel-polyfill": "^6.2.0",
     "babel-preset-es2015": "^6.1.18",
     "babel-runtime": "^6.2.0",
-    "baggage-loader": "^0.2.4",
     "browser-sync": "^2.10.0",
     "browser-sync-webpack-plugin": "^1.0.1",
     "css-loader": "^0.23.0",

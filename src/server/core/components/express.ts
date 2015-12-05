@@ -19,6 +19,8 @@ let helmet = require('helmet');
 let compression = require('compression');
 
 import { create as Logger } from '../../utils/logger/index';
+import { ExecutionTimer } from '../../utils/execution';
+
 let _log: Logger.Console;
 
 export default class Express implements Core.Component {
@@ -27,6 +29,7 @@ export default class Express implements Core.Component {
   private _log: any;
 
   init(app: any, config: Config.IConfig) {
+    let timer = new ExecutionTimer();
     let env: string = app.get('env');
     this._app = app;
     this._config = config;
@@ -35,10 +38,11 @@ export default class Express implements Core.Component {
     let _promise = (resolve: Function, reject: Function) => {
       this.setupServer(env).then(() => {
         this._log.info('Starting Express server on port [' + config.port + ']');
-        this._app.listen(config.port, () => {
+        let server = this._app.listen(config.port, () => {
           this._log.info('Server listening at [http://' + hostname() + ':' + config.port + ']');
           this._log.verbose('Web root [' + config.paths.client + ']');
-          resolve(this._app);
+          this._log.debug('Express instantionation took ' + timer.toString());
+          resolve(server);
         });
       });
     };

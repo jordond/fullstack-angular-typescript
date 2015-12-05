@@ -16,13 +16,12 @@ module.exports = {
   output: {
     path: entryOut,
     filename: 'js/[name].[hash:6].bundle.js',
-    sourceMapFilename: 'js/[name].[hash:6].bundle.js.map',
-    publicPath: 'assets/'
+    sourceMapFilename: 'js/[name].[hash:6].bundle.js.map'
   },
   module: {
     loaders: [{
-      test: /\.html$/,
-      loader: 'file?name=templates/[name]-[hash:6].html'
+      test: /\.tpl.html$/,
+      loader: 'ngtemplate?relativeTo=' + (path.resolve(__dirname, './src/client')) + '/!html-loader'
     }, {
       test: /\.css$/,
       loader: "style!css"

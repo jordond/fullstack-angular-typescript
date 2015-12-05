@@ -79,6 +79,7 @@ export default class Express implements Core.Component {
     let faviconPath = join(path, 'favicon.ico');
     return statAsync(faviconPath).then((err: any) => {
       if (!err) {
+        this._log.debug('Favicon exists and is being used');
         this._app.use(favicon(faviconPath));
       }
     });

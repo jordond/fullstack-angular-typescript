@@ -60,6 +60,7 @@ gulp.task('build:client', help.client.build, ['vet:client'], function () {
   // If gulp dev --env=production, then watchFiles == true and webpack will watch
   var watchFiles = isProduction;
   isProduction = true;
+
   return webpack(config, watchFiles);
 });
 
@@ -97,6 +98,9 @@ function webpack(config, watching) {
     config.plugins = config.plugins.concat(new BrowserSyncPlugin(conf.browserSync));
   }
   $.util.log('Running webpack [CLIENT] in ' + mode + ' mode');
+
+  gulp.src(path.join(conf.paths.client, 'favicon.ico'))
+    .pipe(gulp.dest(path.join(conf.paths.build, 'client')));
 
   return gulp.src(conf.ts.client)
     .pipe($.webpack(config))

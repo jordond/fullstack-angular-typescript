@@ -5,24 +5,23 @@ require('angular-material/angular-material.css');
 require('font-awesome/css/font-awesome.css');
 
 // Core vendor libs
-import * as ngAnimate from 'angular-animate';
-import * as ngUiRouter from 'angular-ui-router';
-import * as ngMaterial from 'angular-material';
-import * as lazyLoad from 'oclazyload';
+// NOTE Using non-ES6 due to Typescript default exports bug
+let ngAnimate  = require('angular-animate');
+let ngUiRouter = require('angular-ui-router');
+let ngMaterial = require('angular-material');
 
 // Core module config
 import routing from './core.routes';
 
 let dependencies: string[] = [
-/* Angular modules */
-  ngAnimate,
+ /* Angular modules */
+   ngAnimate,
 
-/* Cross-app modules */
+ /* Cross-app modules */
 
-/* 3rd party modules */
-  ngUiRouter,
-  ngMaterial,
-  lazyLoad
+ /* 3rd party modules */
+   ngUiRouter,
+   ngMaterial
 ];
 
 let core =

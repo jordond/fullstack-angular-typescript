@@ -26,7 +26,7 @@ Exit((exitCode: number) => {
   } else {
     log.info('Server is exiting cleanly');
   }
-  log.info('Server was running for [' + _uptime.toString() + ']');
+  log.info('Server had been running since [' + _uptime.toString() + ']');
   log.verbose('Server Start [' + _uptime.prettyDate(_uptime.Start) + ']');
   log.verbose('Percise server uptime [' + _uptime.Timer.toString() + ']');
 });

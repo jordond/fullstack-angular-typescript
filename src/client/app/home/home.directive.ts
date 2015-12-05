@@ -1,5 +1,6 @@
 'use strict';
 
+var template = require('./home.tpl.html');
 require('./home.scss');
 
 interface IHomeScope {
@@ -23,7 +24,7 @@ class Home implements ng.IDirective {
   controller: any = HomeController; // to change to type HomeController? use constructor?
   controllerAs: string = 'vm';
   restrict: string = 'EA';
-  template: any = require('./home.tpl.html');
+  templateUrl: string = template;
   scope: IHomeScope = {
     'name': '@'
   };
@@ -33,7 +34,7 @@ class Home implements ng.IDirective {
 class HomeController implements IHomeScope, IHomeVm {
   public name: string;
 
-  public title: string;
+  public title: string = 'Home';
 
   /* @ngInject */
   constructor() {

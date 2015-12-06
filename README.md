@@ -1,8 +1,8 @@
 # A Typescript, Angular, Webpack fullstack starter app
 
-**Formerly plex-landing, will be using this for plex-landing in the future**
+**Under active development, not ready for use**
 
-A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescript, ES6, Angular, and Webpack, with a nice gulp build system.  The client side relies on npm only and not bower.
+A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescript, ES6, Angular, and Webpack, with a nice gulp build system.  The client side relies on npm only and not bower.  It is more of a learning experience for me than anything.
 
 ## Features
 

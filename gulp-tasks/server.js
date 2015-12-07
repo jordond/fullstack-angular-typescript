@@ -20,6 +20,7 @@ var linter = require('./linter')(gulp);
 var isFirstRun = true;
 
 var isProduction = false;
+var isBuildDev = argv.d || (argv.env && argv.env.charAt(0).toLowerCase() === 'd');
 
 if (argv.p || (argv.env && argv.env.charAt(0).toLowerCase() === 'p')) {
   isProduction = true;
@@ -47,6 +48,9 @@ gulp.task('vet:server', help.server.vet, ['clean:server'], function () {
 
 var plugins = require('webpack');
 gulp.task('build:server', help.server.build, ['vet:server'], function () {
+  if (isBuildDev) {
+    return gulp.start('build:server:dev');
+  }
   var config = conf.webpack.server;
   config.plugins = config.plugins.concat(
       new plugins.DefinePlugin({ 'process.env': {
@@ -98,7 +102,7 @@ function webpack(config, watching) {
     mode = $.util.colors.green('[PRODUCTION]');
   }
   if (watching) {
-    config.watch = true;
+    config.watch = !isBuildDev;
     config.debug = true;
   }
   $.util.log('Running webpack [SERVER] in ' + mode + ' mode');

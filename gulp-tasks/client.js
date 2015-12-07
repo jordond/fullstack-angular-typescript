@@ -20,6 +20,7 @@ var help = conf.help;
 var linter = require('./linter')(gulp);
 var isFirstRun = true;
 var isProduction = false;
+var isBuildDebug = argv.d || (argv.env && argv.env.charAt(0).toLowerCase() === 'd');
 
 if (argv.p || (argv.env && argv.env.charAt(0).toLowerCase() === 'p')) {
   isProduction = true;
@@ -93,9 +94,11 @@ function webpack(config, watching) {
     mode = $.util.colors.green('[PRODUCTION]');
   }
   if (watching) {
-    config.watch = true;
+    if (!isBuildDebug) {
+      config.plugins = config.plugins.concat(new BrowserSyncPlugin(conf.browserSync));
+      config.watch = true;
+    }
     config.debug = true;
-    config.plugins = config.plugins.concat(new BrowserSyncPlugin(conf.browserSync));
   }
   $.util.log('Running webpack [CLIENT] in ' + mode + ' mode');
 

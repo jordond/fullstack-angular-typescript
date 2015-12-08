@@ -26,9 +26,9 @@ Exit((exitCode: number) => {
   } else {
     log.info('Server is exiting cleanly');
   }
-  log.info('Server had been running since [' + _uptime.toString() + ']');
-  log.verbose('Server Start [' + _uptime.prettyDate(_uptime.Start) + ']');
-  log.verbose('Percise server uptime [' + _uptime.Timer.toString() + ']');
+  log.info('Server had been running since [' + _uptime.toString() + ']')
+    .verbose('Server Start [' + _uptime.prettyDate(_uptime.Start) + ']')
+    .verbose('Percise server uptime [' + _uptime.Timer.toString() + ']');
 });
 
 /**
@@ -56,14 +56,14 @@ function init(config: Config.IConfig) {
   let log = Logger.create('Init');
   let timer = new ExecutionTimer();
 
-  log.info('Initializing server instance');
-  log.debug('Using following config: ', config);
+  log.info('Initializing server instance')
+     .debug('Using following config: ', config);
 
   new App(config)
     .init()
     .then(() => {
-      log.info('Server initialized');
-      log.info('Initialization time [' + timer.toString() + ']');
+      log.info('Server initialized')
+         .info('Initialization time [' + timer.toString() + ']');
     })
     .catch(failed);
 }

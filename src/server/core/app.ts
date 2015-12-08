@@ -48,8 +48,9 @@ export default class App {
       // Initialize app components and store promises
       this._app.get('test');
       database.init(this._app)
-        .then((app) => routes.init(app))
         .then((app) => server.init(app))
+        .then((app) => routes.init(app))
+        .then(() => server.start())
         .then((server) => sockets.init(server))
         .then(() => database.finalize())
         .then(() => {

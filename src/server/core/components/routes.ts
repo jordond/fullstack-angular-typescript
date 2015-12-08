@@ -27,8 +27,14 @@ export default class Routes implements Core.Component {
    * @returns {Promise} resolve when all routes are loaded
    */
   init(app: any) {
+    if (!app) {
+      this._log.error('[init] App is not defined');
+      throw 'App is not defined';
+    }
+
     let timer = new ExecutionTimer();
     let _router = express.Router();
+
     this._log.info('Registering [Api, Statics] components');
 
     let api = new Api(this._config.api.root);
@@ -42,7 +48,7 @@ export default class Routes implements Core.Component {
       .then((name: string) => {
         this.onRegistered(name);
       })
-      .catch(this.registerErrorHandler);
+      .catch((err) => this.registerErrorHandler(err));
 
     return chain
       .then(() => {

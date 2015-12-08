@@ -28,6 +28,10 @@ export default class Database implements Core.Component {
   }
 
   init(app: any) {
+    if (!app) {
+      this._log.error('[init] App is not defined');
+      throw 'App is not defined';
+    }
     this._timer = new ExecutionTimer();
     this._log.info('Registering all database models components');
 

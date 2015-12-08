@@ -16,6 +16,10 @@ export default class Sockets implements Core.Component {
   }
 
   init(app: any) {
+    if (!app) {
+      this._log.error('[init] App is not defined');
+      throw 'App is not defined';
+    }
     let timer = new ExecutionTimer();
     this._log = create('Sockets');
     this._log.info('Initializing Socket.IO');

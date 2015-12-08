@@ -23,7 +23,7 @@ export default class Console extends Base {
    * @param {IConsoleColors}  colors  output using chalk colors
    * @param {Boolean}         force (optional) always output to console
    */
-  toConsole(item: Logger.ILogItem, colors?: Logger.IConsoleColors, force?: boolean): void {
+  toConsole(item: Logger.ILogItem, colors?: Logger.IConsoleColors, force?: boolean): Console {
     if (this.shouldLog(item.level) || force) {
       let header: string = this.formatHeader(item.level, this.tag);
       let newLine = (item.data !== null && typeof item.data === 'object') ? '\n' : '';
@@ -37,6 +37,7 @@ export default class Console extends Base {
       }
       logToFile(item);
     }
+    return this;
   }
 
   /**
@@ -46,12 +47,12 @@ export default class Console extends Base {
    * @param {data}    data  (optional) extra data to output
    * @param {boolean} force (optional) force output, default true
    */
-  public out(message: string, data?: any, force?: boolean): void {
+  public out(message: string, data?: any, force?: boolean): Console {
     if (typeof force === 'undefined') {
       force = true;
     }
     let item = { level: 'LOG', message: message, data: data };
-    this.toConsole(item, null, force);
+    return this.toConsole(item, null, force);
   }
 
   /**
@@ -60,9 +61,9 @@ export default class Console extends Base {
    * @param {string}  message Content to output
    * @param {any}     data    Extra info to pass to console
    */
-  error(message: string, data?: any): void {
+  error(message: string, data?: any): Console {
     let colors = createColor(chalk.bold.bgRed, chalk.bold.red);
-    this.toConsole(this.createLogItem('ERROR', message, data), colors, true);
+    return this.toConsole(this.createLogItem('ERROR', message, data), colors, true);
   }
 
   /**
@@ -70,9 +71,9 @@ export default class Console extends Base {
    * @param {string}  message Content to output
    * @param {any}     data    Extra info to pass to console
    */
-  warning(message: string, data?: any): void {
+  warning(message: string, data?: any): Console {
     let colors = createColor(chalk.bold.bgYellow, chalk.bold.yellow);
-    this.toConsole(this.createLogItem('WARN', message, data), colors);
+    return this.toConsole(this.createLogItem('WARN', message, data), colors);
   }
 
   /**
@@ -80,9 +81,9 @@ export default class Console extends Base {
    * @param {string}  message Content to output
    * @param {any}     data    Extra info to pass to console
    */
-  info(message: string, data?: any): void {
+  info(message: string, data?: any): Console {
     let colors = createColor(chalk.cyan);
-    this.toConsole(this.createLogItem('INFO', message, data), colors);
+    return this.toConsole(this.createLogItem('INFO', message, data), colors);
   }
 
   /**
@@ -90,9 +91,9 @@ export default class Console extends Base {
    * @param {string}  message Content to output
    * @param {any}     data    Extra info to pass to console
    */
-  verbose(message: string, data?: any): void {
+  verbose(message: string, data?: any): Console {
     let colors = createColor(chalk.magenta);
-    this.toConsole(this.createLogItem('VERBOSE', message, data), colors);
+    return this.toConsole(this.createLogItem('VERBOSE', message, data), colors);
   }
 
   /**
@@ -100,9 +101,9 @@ export default class Console extends Base {
    * @param {string}  message Content to output
    * @param {any}     data    Extra info to pass to console
    */
-  debug(message: string, data?: any): void {
+  debug(message: string, data?: any): Console {
     let colors = createColor(chalk.gray);
-    this.toConsole(this.createLogItem('DEBUG', message, data), colors);
+    return this.toConsole(this.createLogItem('DEBUG', message, data), colors);
   }
 
   /**
@@ -110,9 +111,9 @@ export default class Console extends Base {
    * @param {string}  message Content to output
    * @param {any}     data    Extra info to pass to console
    */
-  silly(message: string, data?: any): void {
+  silly(message: string, data?: any): Console {
     let colors = createColor(chalk.pink);
-    this.toConsole(this.createLogItem('SILLY', message, data), colors);
+    return this.toConsole(this.createLogItem('SILLY', message, data), colors);
   }
 
 } // End of Logger.Console

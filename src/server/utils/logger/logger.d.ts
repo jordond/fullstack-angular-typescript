@@ -35,15 +35,15 @@ declare module Logger {
   class Console {
     constructor(tag: string, options?: IConfig);
 
-    toConsole(item: ILogItem, colors?: IConsoleColors, force?: boolean): void;
-    public out(message: string, data?: any, force?: boolean): void;
+    toConsole(item: ILogItem, colors?: IConsoleColors, force?: boolean): Console;
+    public out(message: string, data?: any, force?: boolean): Console;
 
-    error(message: string, data?: any): void;
-    warning(message: string, data?: any): void;
-    info(message: string, data?: any): void;
-    verbose(message: string, data?: any): void;
-    debug(message: string, data?: any): void;
-    silly(message: string, data?: any): void;
+    error(message: string, data?: any): Console;
+    warning(message: string, data?: any): Console;
+    info(message: string, data?: any): Console;
+    verbose(message: string, data?: any): Console;
+    debug(message: string, data?: any): Console;
+    silly(message: string, data?: any): Console;
   }
 
   function init(config: IConfig): PromiseLike<any>;

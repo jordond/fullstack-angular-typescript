@@ -87,7 +87,7 @@
       "commit": "ba424f7ee39717d51c17699a09ac8df312a7e9a1"
     },
     "lodash/lodash.d.ts": {
-      "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
+      "commit": "c3ab375b371b7b4204adee3b1209baecd81cec02"
     },
     "yargs/yargs.d.ts": {
       "commit": "fb2b3b1e068c9ff7d8f9b0851c08d37d96c95c38"
@@ -112,6 +112,15 @@
     },
     "method-override/method-override.d.ts": {
       "commit": "e5a27ea95e47b95333784f1f0d590127b4e39a89"
+    },
+    "validator/validator.d.ts": {
+      "commit": "c3ab375b371b7b4204adee3b1209baecd81cec02"
+    },
+    "sequelize/sequelize.d.ts": {
+      "commit": "c3ab375b371b7b4204adee3b1209baecd81cec02"
+    },
+    "bluebird/bluebird.d.ts": {
+      "commit": "c3ab375b371b7b4204adee3b1209baecd81cec02"
     }
   }
 }

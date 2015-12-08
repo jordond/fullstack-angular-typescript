@@ -8,8 +8,8 @@
 
 // ===========================================
 
-import Things from './things/things.routes';
-import Stuff from './stuff/stuff.routes';
+import Things from './things/index';
+import Stuff from './stuff/index';
 
 let routes: any[] = [
   Things,

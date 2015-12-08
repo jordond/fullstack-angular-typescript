@@ -39,8 +39,8 @@ export default class Api {
     _log.info('Attempting to register [' + endpoints.length + '] endpoints');
     try {
       // Register all the endpoints
-      for (let Endpoint of endpoints) {
-        let endpoint = new Endpoint();
+      for (let e of endpoints) {
+        let endpoint = new e.routes();
         currentEndpoint = endpoint.name;
 
         let p = endpoint.register(this._router);

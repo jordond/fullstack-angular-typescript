@@ -21,8 +21,6 @@ let compression = require('compression');
 import { create as Logger } from '../../utils/logger/index';
 import { ExecutionTimer } from '../../utils/execution';
 
-let _log: Logger.Console;
-
 export default class Express implements Core.Component {
   private _app: express.Application;
   private _config: Config.IConfig;

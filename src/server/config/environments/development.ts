@@ -8,6 +8,10 @@ export default <Config.IConfig>{
 
   log: {
     level: 'VERBOSE'
+  },
+
+  database: {
+    name: 'dev-data'
   }
 
 };

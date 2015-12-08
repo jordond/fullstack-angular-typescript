@@ -29,6 +29,13 @@ declare module Config {
     serveClient?: boolean;
   }
 
+  interface IDatabase {
+    name?: string;
+    username?: string;
+    password?: string;
+    path?: string;
+  }
+
   interface IConfig {
     env?: IEnvironment;
     paths?: IPaths;
@@ -37,12 +44,20 @@ declare module Config {
     secrets?: ISecrets;
     api?: IApi;
     socket?: ISocket;
+    database?: IDatabase;
   }
 }
 
 declare module Core {
   interface Component {
     init(app: any, config: Config.IConfig): Promise<void> | Promise<{}>;
+  }
+}
+
+declare module Database {
+  interface IModel {
+    name: string;
+    schema: any;
   }
 }
 
@@ -63,7 +78,8 @@ declare module Route {
     }
 
     interface IModel {
-
+      name: string;
+      schema: any;
     }
   }
 

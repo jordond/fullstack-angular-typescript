@@ -79,8 +79,17 @@ let _config: Config.IConfig = {
   socket: {
     path: '/sync',
     serveClient: false
-  }
+  },
 
+  /**
+   * SQLite database configuration
+   */
+  database: {
+    name: 'data',
+    username: 'admin',
+    password: 'admin',
+    path: './data/database.sqlite'
+  }
 };
 
 /**

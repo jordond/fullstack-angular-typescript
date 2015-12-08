@@ -7,9 +7,17 @@ import { ExecutionTimer } from '../../utils/execution';
 import Api from '../../routes/api/index';
 import Statics from '../../routes/static/index';
 
-let _log: Logger.Console;
+
 
 export default class Routes implements Core.Component {
+  private _log: Logger.Console;
+  private _config: Config.IConfig;
+
+  constructor(config: Config.IConfig) {
+    this._log = create('Routes');
+    this._config = config;
+  }
+
   /**
    * Initialize the Router component
    * Load all api routes and then setup
@@ -18,50 +26,51 @@ export default class Routes implements Core.Component {
    * @param {Express.Router}      router  Express router object
    * @returns {Promise} resolve when all routes are loaded
    */
-  init(app: any, config: Config.IConfig) {
+  init(app: any) {
     let timer = new ExecutionTimer();
     let _router = express.Router();
-    _log = create('Routes');
-    _log.info('Registering [Api, Statics] components');
+    this._log.info('Registering [Api, Statics] components');
 
-    let api = new Api(config.api.root);
-    let statics = new Statics(config.paths.client);
+    let api = new Api(this._config.api.root);
+    let statics = new Statics(this._config.paths.client);
 
     let chain = api.register(app)
       .then((name: string) => {
-        onRegistered(name);
+        this.onRegistered(name);
         return statics.register(app);
       })
       .then((name: string) => {
-        onRegistered(name);
+        this.onRegistered(name);
       })
-      .catch(registerErrorHandler);
+      .catch(this.registerErrorHandler);
 
     return chain
       .then(() => {
-        _log.info('Finished registering all route components');
-        _log.debug('Routes instantiation took ' + timer.toString());
+        this._log.info('Finished registering all route components');
+        this._log.debug('Routes instantiation took ' + timer.toString());
+        return app;
       });
+  }
+
+  /**
+  * Called when an route has finished registering
+  * @param {String}  name  Name of the route
+  */
+  private onRegistered(name: string) {
+    // TODO handle this?
+    this._log.verbose('Finished registering [' + name + ']');
+  }
+
+  /**
+  * Handle any errors that happen when registering routes.
+  * Log the error event name, then throw the error so that
+  * the promise gets rejected
+  * @param {Route.IRouterError} err  Contains all the error information
+  * @throws {Object} Error object from exception
+  */
+  private registerErrorHandler(err: Route.IRouterError) {
+    this._log.error('Error register route [' + err.name + ']', err);
+    throw err;
   }
 }
 
-/**
- * Called when an route has finished registering
- * @param {String}  name  Name of the route
- */
-function onRegistered(name: string) {
-  // TODO handle this?
-  _log.verbose('Finished registering [' + name + ']');
-}
-
-/**
- * Handle any errors that happen when registering routes.
- * Log the error event name, then throw the error so that
- * the promise gets rejected
- * @param {Route.IRouterError} err  Contains all the error information
- * @throws {Object} Error object from exception
- */
-function registerErrorHandler(err: Route.IRouterError) {
-  _log.error('Error register route [' + err.name + ']', err);
-  throw err;
-}

@@ -37,20 +37,21 @@ export default class App {
   init() {
     let log = create('App');
     this._app.set('env', getEnvironment(this._config.env));
+
     // Create the boostrap promise
     let _promise = (resolve: Function, reject: Function) => {
+      let database = new Database(this._config);
+      let routes = new Routes(this._config);
+      let server = new Express(this._config);
+      let sockets = new Sockets(this._config);
 
       // Initialize app components and store promises
-      let routes = new Routes().init(this._app, this._config);
-      let database = new Database().init(this._app, this._config);
-      let sockets = new Sockets();
-      let server = new Express()
-        .init(this._app, this._config)
-        .then((server: any) => sockets.init(server, this._config));
-
-      // Wait for all the component promises to resolve
-      Promise
-        .all([routes, database, server])
+      this._app.get('test');
+      database.init(this._app)
+        .then((app) => routes.init(app))
+        .then((app) => server.init(app))
+        .then((server) => sockets.init(server))
+        .then(() => database.finalize())
         .then(() => {
           log.info('Server bootstrapping has been completed');
           resolve();

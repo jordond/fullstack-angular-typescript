@@ -3,9 +3,11 @@
 import * as express from 'express';
 
 import { create } from '../../utils/logger/index';
+import { getDatabase } from '../../core/components/database';
 import endpoints from './endpoints';
 
 let _log: Logger.Console;
+let _database: any;
 
 /**
  * A Class to handle all of the API specific routing for the
@@ -38,12 +40,28 @@ export default class Api {
     let currentEndpoint = 'Unknown';
     _log.info('Attempting to register [' + endpoints.length + '] endpoints');
     try {
+      let database = getDatabase();
       // Register all the endpoints
-      for (let e of endpoints) {
-        let endpoint = new e.routes();
+      for (let endpoint of endpoints) {
+        let model = endpoint.model;
+        let routes = new endpoint.routes();
         currentEndpoint = endpoint.name;
+        // let sockets = new endpoint.sockets();
 
-        let p = endpoint.register(this._router);
+        // Register endpoint routes
+        let p = routes.register(this._router);
+        _log.debug('Registered [' + endpoint.name + ']\'s routes');
+
+        // Register endpoint model
+        if (model.schema && database.sequelize) {
+          let m = database.sequelize.define(model.name, model.schema);
+          database[model.name] = m;
+          _log.debug('Registered [' + endpoint.name + ']\'s model');
+        } else {
+          _log.error('Could not register [' + model.name + ']\'s model');
+          throw { message: 'Model or database error', data: model, database: database };
+        }
+
         _log.verbose('Registered endpoint [' + currentEndpoint + ']');
         this._pomises.push(p);
       }

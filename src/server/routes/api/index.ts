@@ -3,7 +3,7 @@
 import * as express from 'express';
 
 import { create } from '../../utils/logger/index';
-import { getDatabase } from '../../core/components/database';
+import { database } from '../../core/components/database';
 import endpoints from './endpoints';
 
 let _log: Logger.Console;
@@ -40,7 +40,7 @@ export default class Api {
     let currentEndpoint = 'Unknown';
     _log.info('Attempting to register [' + endpoints.length + '] endpoints');
     try {
-      let database = getDatabase();
+      //let database = getDatabase();
       // Register all the endpoints
       for (let endpoint of endpoints) {
         let model = endpoint.model;
@@ -54,7 +54,7 @@ export default class Api {
 
         // Register endpoint model
         if (model.schema && database.sequelize) {
-          let m = database.sequelize.define(model.name, model.schema);
+          let m = database.sequelize.define(model.name, model.schema, model.methods);
           database[model.name] = m;
           _log.debug('Registered [' + endpoint.name + ']\'s model');
         } else {

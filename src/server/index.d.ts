@@ -54,13 +54,6 @@ declare module Core {
   }
 }
 
-declare module Database {
-  interface IModel {
-    name: string;
-    schema: any;
-  }
-}
-
 declare module Route {
 
   module Api {
@@ -80,6 +73,10 @@ declare module Route {
     interface IModel {
       name: string;
       schema: any;
+      methods?: {
+        classMethods?: Function;
+        instanceMethods?: Function;
+      }
     }
   }
 

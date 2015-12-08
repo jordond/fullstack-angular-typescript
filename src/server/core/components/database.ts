@@ -11,6 +11,7 @@ import { ExecutionTimer } from '../../utils/execution';
 import endpoints from '../../routes/api/endpoints';
 
 let _db: any = {};
+let _seedQueue: any[] = [];
 
 export let database = _db;
 export let models = _db.models;
@@ -20,13 +21,13 @@ export let models = _db.models;
  * @param {string}  name  Name of the requested model
  * @returns {Object} Requested model if it exists
  */
-export let model = function (name: string) {
+export let model = function(name: string) {
   let model = _db.models[name];
   if (!model) {
     Logger('Database').error('Model [' + name + '] doesn\'t exist');
   }
   return model;
-}
+};
 
 /**
  * Handles all the database initialization
@@ -64,10 +65,10 @@ export default class Database implements Core.Component {
     let conf = this._config.database;
     let options = {
       dialect: 'sqlite',
-      storage: path.join(__dirname, conf.path || './data/database.sqlite')
+      storage: path.join(this._config.paths.dataDir, conf.filename || 'database.sqlite')
     };
     mkdirp.sync(path.dirname(options.storage));
-    this._log.verbose('Using database at [' + path.resolve(options.storage) + ']');
+    this._log.verbose('Using [' + path.resolve(options.storage) + ']');
     this._sequelize = new Sequelize(conf.name, conf.username, conf.password, options);
     _db.Sequelize = Sequelize;
     _db.sequelize = this._sequelize;
@@ -86,8 +87,8 @@ export default class Database implements Core.Component {
     return this.registerAssociates()
       .then(this._sequelize.sync())
       .then(() => {
-        this._log.info('Registered all database models');
-        this._log.debug('Database instantionation took ' + this._timer.toString());
+        this._log.info('Registered all database models')
+          .debug('Database instantionation took ' + this._timer.toString());
         return _db.sequelize = this._sequelize;
       })
       .catch((err) => {

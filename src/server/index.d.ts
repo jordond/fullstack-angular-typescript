@@ -6,6 +6,7 @@ declare module Config {
     root: string;
     client: string;
     server: string;
+    dataDir?: string;
     webDir?: string;
   }
 
@@ -33,7 +34,7 @@ declare module Config {
     name?: string;
     username?: string;
     password?: string;
-    path?: string;
+    filename?: string;
   }
 
   interface IConfig {
@@ -76,7 +77,7 @@ declare module Route {
       methods?: {
         classMethods?: Function;
         instanceMethods?: Function;
-      }
+      };
     }
   }
 

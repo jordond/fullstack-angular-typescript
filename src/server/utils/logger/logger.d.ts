@@ -1,7 +1,6 @@
 declare module Logger {
 
   interface IConfig {
-    path?: string;
     filename?: string;
     level?: string;
     short?: boolean;

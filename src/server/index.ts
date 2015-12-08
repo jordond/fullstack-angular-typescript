@@ -7,9 +7,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { argv as args } from 'yargs';
 
-import Config from './config/index';
 import App from './core/app';
-import Exit from './core/exit';
+import { default as initConfig } from './config/index';
+import { default as onExit } from './core/exit';
 
 import { ExecutionTimer, Uptime } from './utils/execution';
 import * as Logger from './utils/logger/index';
@@ -19,7 +19,7 @@ let _uptime = new Uptime();
 /**
  * POC for now
  */
-Exit((exitCode: number) => {
+onExit((exitCode: number) => {
   let log = Logger.create('Report');
   if (exitCode !== 0) {
     log.warning('Server is exiting with a non-zero code [' + exitCode + ']');
@@ -38,13 +38,13 @@ Exit((exitCode: number) => {
 let userConfigPath: string = (args.c || args.config) || path.join(__dirname, '../config.json');
 fs.readFile(userConfigPath, (err: any, data: any) => {
   if (err) {
-    let log = Logger.create('Init');
-    log.error('Config file [' + userConfigPath + '] not found, exiting.');
+    Logger.create('Init')
+      .error('Config file [' + userConfigPath + '] not found, exiting.');
     process.exit(1);
   }
-  let config = Config(JSON.parse(data));
-  Logger.init(config.log)
-    .then(() => init(<Config.IConfig>config))
+  initConfig(JSON.parse(data))
+    .then((config: Config.IConfig) => Logger.init(config))
+    .then(bootstrapServer)
     .catch(failed);
 });
 
@@ -52,17 +52,17 @@ fs.readFile(userConfigPath, (err: any, data: any) => {
  * Initialize the server with the configuration
  * @param {Config.IConfig}  config  Merged configuration object
  */
-function init(config: Config.IConfig) {
+function bootstrapServer(config: Config.IConfig) {
   let log = Logger.create('Init');
   let timer = new ExecutionTimer();
 
-  log.info('Initializing server instance')
+  log.info('Bootstrapping server instance')
      .debug('Using following config: ', config);
 
   new App(config)
     .init()
     .then(() => {
-      log.info('Server initialized')
+      log.info('Server has been initialized')
          .info('Initialization time [' + timer.toString() + ']');
     })
     .catch(failed);

@@ -12,7 +12,9 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
+
 import * as _ from 'lodash';
+import * as mkdirp from 'mkdirp';
 
 import prod from './environments/production';
 import dev from './environments/development';
@@ -49,7 +51,6 @@ let _config: Config.IConfig = {
    * types: console, file, json, none
    */
   log: {
-    path: './logs',
     filename: 'server.log',
     level: <string> 'INFO',
     short: <boolean> false,
@@ -88,7 +89,7 @@ let _config: Config.IConfig = {
     name: 'data',
     username: 'admin',
     password: 'admin',
-    path: './data/database.sqlite'
+    filename: 'database.sqlite'
   }
 };
 
@@ -101,9 +102,23 @@ let _config: Config.IConfig = {
  * @returns {Object}  Combined configuration file. (defaults, environment, user)
  */
 export default function init(config: any, environment?: string): any {
-  let env = environment || config.env || _config.env;
-  let environmentConfig = env === 'production' ? prod : dev;
-  _config = _.merge(_config, environmentConfig || {}, config || {}, defaults);
+  let _promise = function(resolve: Function, reject: Function) {
+    let env = environment || config.env || _config.env;
+    let environmentConfig = env === 'production' ? prod : dev;
+    _config = _.merge(_config, environmentConfig || {}, config || {}, defaults);
 
-  return _config;
+    if (!_config.paths.dataDir || _config.paths.dataDir === '') {
+      _config.paths.dataDir = path.join(_config.paths.root, './data');
+    }
+
+    let dir = path.resolve(_config.paths.dataDir);
+    fs.stat(path.resolve(_config.paths.dataDir), (err: any) => {
+      if (err) {
+        mkdirp.sync(dir);
+      }
+      return resolve(_config);
+    });
+  }
+
+  return new Promise(_promise);
 }

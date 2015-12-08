@@ -1,6 +1,5 @@
 'use strict';
 
-import { join } from 'path';
 import * as winston from 'winston';
 
 const MEGABYTE = 1000 * 1000;
@@ -11,7 +10,7 @@ let _winstonInstance = winston;
 export function init(config: Logger.IConfig) {
   let winstonOptions = {
     level: config.level.toLowerCase(),
-    filename: join(config.path, config.filename),
+    filename:config.filename,
     maxsize: 50 * MEGABYTE,
     maxFiles: 3
   };

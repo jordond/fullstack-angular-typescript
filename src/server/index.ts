@@ -72,7 +72,7 @@ function failed(err: any) {
   let log = Logger.create('App');
   log.error('Server encountered a problem: ', err);
   if (err.stack) {
-    log.error('Stack:', err.stack);
+    log.error('Stack:\n', err.stack);
   }
   process.exit(1);
 }

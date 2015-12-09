@@ -43,6 +43,7 @@ declare module Logger {
     verbose(message: string, data?: any): Console;
     debug(message: string, data?: any): Console;
     silly(message: string, data?: any): Console;
+    shouldLog(level: string): boolean;
   }
 
   function init(config: IConfig): PromiseLike<any>;

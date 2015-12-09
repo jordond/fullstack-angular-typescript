@@ -118,7 +118,7 @@ export default function init(config: any, environment?: string): any {
       }
       return resolve(_config);
     });
-  }
+  };
 
   return new Promise(_promise);
 }

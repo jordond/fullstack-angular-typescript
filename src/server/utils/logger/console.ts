@@ -116,6 +116,10 @@ export default class Console extends Base {
     return this.toConsole(this.createLogItem('SILLY', message, data), colors);
   }
 
+  // shouldLog(outLevel: string): boolean {
+  //   return super.shouldLog(outLevel);
+  // }
+
 } // End of Logger.Console
 
 /**

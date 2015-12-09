@@ -11,7 +11,7 @@
 import Things from './things/index';
 import Stuff from './stuff/index';
 
-let routes: any[] = [
+let routes: Route.Api.IEndpoint[] = [
   Things,
   Stuff
 ];

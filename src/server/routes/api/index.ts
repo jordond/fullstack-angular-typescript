@@ -3,7 +3,7 @@
 import * as express from 'express';
 
 import { create } from '../../utils/logger/index';
-import { database } from '../../core/components/database';
+import { database as getDatabase } from '../../core/components/database';
 import endpoints from './endpoints';
 
 let _log: Logger.Console;
@@ -40,7 +40,7 @@ export default class Api {
     let currentEndpoint = 'Unknown';
     _log.info('Attempting to register [' + endpoints.length + '] endpoints');
     try {
-      //let database = getDatabase();
+      let database = getDatabase();
       // Register all the endpoints
       for (let endpoint of endpoints) {
         let model = endpoint.model;
@@ -53,9 +53,10 @@ export default class Api {
         _log.debug('Registered [' + endpoint.name + ']\'s routes');
 
         // Register endpoint model
-        if (model.schema && database.sequelize) {
-          let m = database.sequelize.define(model.name, model.schema, model.methods);
-          database[model.name] = m;
+        if (model.schema && database.instance) {
+          let m = database.instance.define(model.name, model.schema, model.methods);
+          database.models[model.name] = m;
+          database.addSeed(m, model.seeds);
           _log.debug('Registered [' + endpoint.name + ']\'s model');
         } else {
           _log.error('Could not register [' + model.name + ']\'s model');
@@ -66,7 +67,7 @@ export default class Api {
         this._pomises.push(p);
       }
     } catch (error) {
-      throw { name: currentEndpoint, err: error };
+      throw { err: error, stack: error.stack };
     }
 
     /**

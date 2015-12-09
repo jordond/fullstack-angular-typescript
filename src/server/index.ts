@@ -36,10 +36,13 @@ onExit((exitCode: number) => {
  * or from the command line
  */
 let userConfigPath: string = (args.c || args.config) || path.join(__dirname, '../config.json');
-fs.readFile(userConfigPath, (err: any, data: any) => {
+fs.readFile(path.resolve(userConfigPath), (err: any, data: any) => {
   if (err) {
     Logger.create('Init')
-      .error('Config file [' + userConfigPath + '] not found, exiting.');
+      .error('Config file [' + userConfigPath + '] not found, exiting.')
+      .info('Create config in [' + path.resolve(path.join(__dirname, '..')) + ']')
+      .info('Or add flag "--config=/path/to/config"');
+
     process.exit(1);
   }
   initConfig(JSON.parse(data))

@@ -13,30 +13,31 @@ let _loggerConfig: Logger.IConfig;
  * Initialize the logger with configuration
  * @param {Logger.IConfig} config Logger specific configuration
  */
-export function init(config: Logger.IConfig) {
-  let log = new Console('Logger', config );
-  log.debug('Logger config: ', config);
+export function init(config: Config.IConfig) {
+  let conf: Logger.IConfig = config.log;
+  let log = new Console('Logger', conf );
+  log.debug('Logger config: ', conf);
 
-  config.path = path.join(__dirname, config.path || './logs');
-  config.filename = config.filename || 'logger.log';
-  mkdirp.sync(config.path);
+  let logDir = path.join(config.paths.dataDir, './logs');
+  conf.filename = path.resolve(path.join(logDir, conf.filename || 'logger.log'));
+  mkdirp.sync(logDir);
 
-  config.default = Console.validLevel(config.default) ? config.default.toUpperCase() : 'INFO';
+  conf.default = Console.validLevel(conf.default) ? conf.default.toUpperCase() : 'INFO';
 
-  let isValidLevel = Console.validLevel(config.level);
+  let isValidLevel = Console.validLevel(conf.level);
   if (!isValidLevel) {
-    log.warning('Invalid log level [' + config.level.toUpperCase() + '] defaulting to [' + config.default + ']');
+    log.warning('Invalid log level [' + conf.level.toUpperCase() + '] defaulting to [' + conf.default + ']');
   }
-  config.level = isValidLevel ? config.level.toUpperCase() : config.default;
+  conf.level = isValidLevel ? conf.level.toUpperCase() : conf.default;
 
-  _loggerConfig = config;
-  initWinston(config).then(() => {
-    log.info('Initialized logger with level of [' + config.level + ']');
-    log.info('Using [' + path.resolve(config.path, config.filename) + ']');
+  _loggerConfig = conf;
+  initWinston(conf).then(() => {
+    log.info('Initialized logger with level of [' + conf.level + ']')
+       .info('Using [' + conf.filename + ']');
   });
 
 
-  return Promise.resolve();
+  return Promise.resolve(config);
 }
 
 /**

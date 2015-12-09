@@ -3,9 +3,11 @@
 import * as express from 'express';
 
 import { create } from '../../utils/logger/index';
+import { database as getDatabase } from '../../core/components/database';
 import endpoints from './endpoints';
 
 let _log: Logger.Console;
+let _database: any;
 
 /**
  * A Class to handle all of the API specific routing for the
@@ -38,17 +40,34 @@ export default class Api {
     let currentEndpoint = 'Unknown';
     _log.info('Attempting to register [' + endpoints.length + '] endpoints');
     try {
+      let database = getDatabase();
       // Register all the endpoints
-      for (let Endpoint of endpoints) {
-        let endpoint = new Endpoint();
+      for (let endpoint of endpoints) {
+        let model = endpoint.model;
+        let routes = new endpoint.routes();
         currentEndpoint = endpoint.name;
+        // let sockets = new endpoint.sockets();
 
-        let p = endpoint.register(this._router);
+        // Register endpoint routes
+        let p = routes.register(this._router);
+        _log.debug('Registered [' + endpoint.name + ']\'s routes');
+
+        // Register endpoint model
+        if (model.schema && database.instance) {
+          let m = database.instance.define(model.name, model.schema, model.methods);
+          database.models[model.name] = m;
+          database.addSeed(m, model.seeds);
+          _log.debug('Registered [' + endpoint.name + ']\'s model');
+        } else {
+          _log.error('Could not register [' + model.name + ']\'s model');
+          throw { message: 'Model or database error', data: model, database: database };
+        }
+
         _log.verbose('Registered endpoint [' + currentEndpoint + ']');
         this._pomises.push(p);
       }
     } catch (error) {
-      throw { name: currentEndpoint, err: error };
+      throw { err: error, stack: error.stack };
     }
 
     /**

@@ -10,5 +10,10 @@ export default <Config.IConfig>{
   log: {
     level: 'INFO',
     short: true
+  },
+
+  database: {
+    name: 'prod-data'
   }
+
 };

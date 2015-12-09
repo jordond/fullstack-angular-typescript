@@ -21,29 +21,37 @@ let compression = require('compression');
 import { create as Logger } from '../../utils/logger/index';
 import { ExecutionTimer } from '../../utils/execution';
 
-let _log: Logger.Console;
-
 export default class Express implements Core.Component {
-  private _app: express.Application;
+  private _log: Logger.Console;
   private _config: Config.IConfig;
-  private _log: any;
+  private _timer: ExecutionTimer;
+  private _app: any;
 
-  init(app: any, config: Config.IConfig) {
-    let timer = new ExecutionTimer();
-    let env: string = app.get('env');
-    this._app = app;
-    this._config = config;
+  constructor(config: Config.IConfig) {
     this._log = Logger('Express');
+    this._config = config;
+  }
 
+  init(app: any) {
+    if (!app) {
+      this._log.error('[init] App is not defined');
+      throw 'App is not defined';
+    }
+    let env: string = app.get('env');
+    this._timer = new ExecutionTimer();
+    this._app = app;
+
+    return this.setupServer(env).then(() => this._app);
+  }
+
+  start() {
     let _promise = (resolve: Function, reject: Function) => {
-      this.setupServer(env).then(() => {
-        this._log.info('Starting Express server on port [' + config.port + ']');
-        let server = this._app.listen(config.port, () => {
-          this._log.info('Server listening at [http://' + hostname() + ':' + config.port + ']');
-          this._log.verbose('Web root [' + config.paths.client + ']');
-          this._log.debug('Express instantionation took ' + timer.toString());
-          resolve(server);
-        });
+      this._log.info('Starting Express server on port [' + this._config.port + ']');
+      let server = this._app.listen(this._config.port, () => {
+        this._log.info('Server listening at [http://' + hostname() + ':' + this._config.port + ']');
+        this._log.verbose('Web root [' + this._config.paths.client + ']');
+        this._log.debug('Express instantionation took ' + this._timer.toString());
+        resolve(server);
       });
     };
 
@@ -68,11 +76,13 @@ export default class Express implements Core.Component {
 
     // Environment specific options
     if (env === 'production') {
+      this._log.debug('Setting morgan up in production mode, ignoring < 400');
       this._app.use(morgan('combined', {
         skip: (req: express.Request, res: express.Response) => res.statusCode < 400
       }));
       return this.setupFavicon(this._config.paths.client);
-    } else if (env === 'development') {
+    } else {
+      this._log.debug('Setting morgan up in dev mode, showing all');
       this._app.use(morgan('dev'));
       this._app.use(errorHandler());
       return Promise.resolve();
@@ -80,6 +90,7 @@ export default class Express implements Core.Component {
   }
 
   setupFavicon(path: string) {
+    this._log.debug('Checking if favicon exists');
     let faviconPath = join(path, 'favicon.ico');
     return statAsync(faviconPath).then((err: any) => {
       if (!err) {

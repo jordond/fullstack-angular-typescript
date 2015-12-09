@@ -7,21 +7,30 @@ import { ExecutionTimer } from '../../utils/execution';
 
 export default class Sockets implements Core.Component {
   private _log: Logger.Console;
+  private _config: Config.IConfig;
   private _io: any;
   private _socketsConnected: number;
 
-  init(app: any, config: Config.IConfig) {
+  constructor(config: Config.IConfig) {
+    this._config = config;
+  }
+
+  init(app: any) {
+    if (!app) {
+      this._log.error('[init] App is not defined');
+      throw 'App is not defined';
+    }
     let timer = new ExecutionTimer();
     this._log = create('Sockets');
     this._log.info('Initializing Socket.IO');
-    this._log.verbose('Socket path [' + config.socket.path + ']');
+    this._log.verbose('Socket path [' + this._config.socket.path + ']');
 
-    this._io = socketIo.listen(app, config.socket);
+    this._io = socketIo.listen(app, this._config.socket);
     this._io.on('connection', this.onConnect);
 
     this._log.verbose('Initial Socket setup finished');
     this._log.debug('Sockets instantiation took ' + timer.toString());
-    return Promise.resolve();
+    return Promise.resolve(app);
   }
 
   get connected() {

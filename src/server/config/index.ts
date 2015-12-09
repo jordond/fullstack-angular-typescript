@@ -89,7 +89,8 @@ let _config: Config.IConfig = {
     name: 'data',
     username: 'admin',
     password: 'admin',
-    filename: 'database.sqlite'
+    filename: 'database.sqlite',
+    devMode: false // Always recreate database
   }
 };
 
@@ -109,6 +110,12 @@ export default function init(config: any, environment?: string): any {
 
     if (!_config.paths.dataDir || _config.paths.dataDir === '') {
       _config.paths.dataDir = path.join(_config.paths.root, './data');
+    }
+
+    // If actively developing keep the data dir in server dir so it gets
+    // wiped after every file change
+    if (_config.debug) {
+      _config.paths.dataDir = path.join(_config.paths.server, './data');
     }
 
     let dir = path.resolve(_config.paths.dataDir);

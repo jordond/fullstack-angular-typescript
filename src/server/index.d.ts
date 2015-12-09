@@ -36,6 +36,7 @@ declare module Config {
     username?: string;
     password?: string;
     filename?: string;
+    devMode?: boolean;
   }
 
   interface IConfig {
@@ -47,6 +48,7 @@ declare module Config {
     api?: IApi;
     socket?: ISocket;
     database?: IDatabase;
+    debug?: boolean;
   }
 }
 
@@ -99,7 +101,7 @@ declare module Route {
     }
 
     interface IClassMethods {
-      associate?: (self: any, models: any) => void;
+      associate?: (models: any) => void;
       [name: string]: any;
     }
 

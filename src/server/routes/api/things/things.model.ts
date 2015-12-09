@@ -12,7 +12,7 @@ let Things: Route.Api.IModel = {
   methods: {
     classMethods: {
       associate: (models: IModel) => {
-        models['things'].hasMany(models['stuff']);
+        models['things'].belongsTo(models['stuff']);
       }
     },
     instanceMethods: function() {

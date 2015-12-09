@@ -189,7 +189,7 @@ export default class Database implements Core.Component {
       Object.keys(_db.models).forEach((modelName) => {
         if ('associate' in _db.models[modelName]) {
           _log.verbose('Registering [' + modelName + '] associates');
-          let model = <any>_db.models[modelName]
+          let model = <any>_db.models[modelName];
           model.associate(_db.models);
         }
       });

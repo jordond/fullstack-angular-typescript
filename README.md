@@ -37,15 +37,14 @@ A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescr
 - I am currently scaffolding out the build system
 - Add gulp scripts to the `package.json`
 - **Backend**
-  - Redo the routes, and route loader
+  - ~~Redo the routes, and route loader~~
   - Implement sockets and configs for each route
-  - Global server config, powered by a `./config.js`
+  - ~~Global server config, powered by a `./config.js`~~
   - Make gulp read node port from `./config.js`
 - **Frontend**
   - Add an actual front end example
-  - Maybe use `oclazyload` to lazy load modules
-  - Add a template cache so templates don't have to be loaded from server
-  - Make sure sourcemaps are working
+  - ~~Add a template cache so templates don't have to be loaded from server~~
+  - ~~Make sure sourcemaps are working~~
 
 ## Main Tasks
 **Soon to be replaced by npm scripts**
@@ -80,6 +79,10 @@ A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescr
 If you plan to use the deploy script, be sure to edit `deploy.config.js` with the information of the server.  To make changes to the folder structure change the paths in `gulp.config.js`.  BrowserSync settings can also be found in `gulp.config.js`.
 
 ## Running
+
+A config file (see example.config.json) needs to be placed in the project root.  Or for better safety pass the path of the config file in as an argument.
+
+`--config=path/to/config | -c path/to/config`
 
 1. Export production environment `export ENV=production`
 2. Run the server `node build/server/app.js`

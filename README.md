@@ -2,6 +2,9 @@
 
 **Under active development, not ready for use**
 
+**Update December 10**
+I want to start working on other projects, and I feel the backend is in a decent enough place right now.  It works pretty well, and is fairly dynamic.  There isn't really a front-end demo to this, I may add one eventually.
+
 A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescript, ES6, Angular, and Webpack, with a nice gulp build system.  The client side relies on npm only and not bower.  It is more of a learning experience for me than anything.
 
 ## Features
@@ -26,21 +29,12 @@ A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescr
   - ES6
   - Webpack
   - Angular Material
-- **Build System**
-  - Gulp
-  - Webpack
-  - Babel
-  - BrowserSync
-  - many more...
 
 ## To-do
-- I am currently scaffolding out the build system
-- Add gulp scripts to the `package.json`
 - **Backend**
   - ~~Redo the routes, and route loader~~
-  - Implement sockets and configs for each route
+  - ~~Implement sockets and configs for each route~~
   - ~~Global server config, powered by a `./config.js`~~
-  - Make gulp read node port from `./config.js`
 - **Frontend**
   - Add an actual front end example
   - ~~Add a template cache so templates don't have to be loaded from server~~
@@ -91,6 +85,9 @@ A config file (see example.config.json) needs to be placed in the project root. 
 ## Developing
 
 ### Issues
+
+#### Bluebird warnings
+I don't actually use bluebird in this app (save for a promisify maybe), as I wanted to try a ES6 experience.  However Sequelize depends on bluebirds for its promises.  With their latest update Bluebird introduced warnings if handling of promises wasn't done correctly.  Sequelize suffers from some of these warnings, and methods such as `.findAll() .findById() .count()` will display a huge block of warning code.  There is nothing I can do about that for the moment, so if you see them just ignore it. (My logger will not log bluebirds warnings)
 
 #### Sourcemaps
 Since I am now using webpack to handle the backend, the below fix is no longer required.

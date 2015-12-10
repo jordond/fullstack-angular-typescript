@@ -45,9 +45,7 @@ export default class Routes implements Core.Component {
         this.onRegistered(name);
         return statics.register(app);
       })
-      .then((name: string) => {
-        this.onRegistered(name);
-      })
+      .then((name: string) => this.onRegistered(name))
       .catch((err) => this.registerErrorHandler(err));
 
     return chain

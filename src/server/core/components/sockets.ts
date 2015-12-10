@@ -10,7 +10,7 @@ let _models: string[] = [];
 
 export let addModelSocket = (modelName: string) => {
   _models.push(modelName);
-}
+};
 
 export default class Sockets implements Core.Component {
   private _log: Logger.Console;
@@ -95,10 +95,11 @@ export default class Sockets implements Core.Component {
     for (let model of _models) {
       let onSave = (document: any[] | {}) => {
         socket.emit(model + ':save', document);
-      }
+      };
+
       let onDelete = (document: any[] | {}) => {
         socket.emit(model + ':delete', document);
-      }
+      };
 
       this._events.on('bulkSave', onSave);
       this._events.on('save', onSave);

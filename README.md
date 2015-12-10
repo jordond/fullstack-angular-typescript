@@ -7,6 +7,8 @@ I want to start working on other projects, and I feel the backend is in a decent
 
 A fullstack skeleton starter app for a trendy little web app.  Utilizing Typescript, ES6, Angular, and Webpack, with a nice gulp build system.  The client side relies on npm only and not bower.  It is more of a learning experience for me than anything.
 
+This certainly won't be for everybody (or anyone), the server is needlessly complex.  I could have gotten away with making it simple, but this was a learning experience for me.  As such I tried to make things dynamic, such as API endpoints.
+
 ## Features
 
 - Written with typescript
@@ -83,6 +85,9 @@ A config file (see example.config.json) needs to be placed in the project root. 
   - Optionally run `ENV=production node build/server/app.js`
 
 ## Developing
+
+### Adding an API Endpoint
+Look in `src/server/routes/api/things` copy or create a new folder.  Make sure to have a index file that references the endpoints routes and model.  Then edit `src/server/routes/api/endpoints.ts` and add the import to the array of endpoints;
 
 ### Issues
 

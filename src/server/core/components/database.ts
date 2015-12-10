@@ -2,6 +2,7 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
+import { EventEmitter } from 'events';
 
 import * as mkdirp from 'mkdirp';
 import * as _Sequelize from 'sequelize';
@@ -31,8 +32,9 @@ export interface IDatabase {
   Sequelize: any;
   instance: _Sequelize.Sequelize;
   models: IModel;
-  addSeed: (model: _Sequelize.Model<any, any>, modelData: Route.Api.ISeedOptions) => void;
   seeds: ISeed[];
+  register: (model: Route.Api.IModel) => void;
+  events: DatabaseEvents;
 }
 
 /**
@@ -94,7 +96,8 @@ export default class Database implements Core.Component {
       instance: new Sequelize(conf.name, conf.username, conf.password, options),
       models: {},
       seeds: <ISeed[]>[],
-      addSeed: addSeed
+      register: this.register,
+      events: new DatabaseEvents()
     };
 
     if (conf.devMode) {
@@ -106,6 +109,25 @@ export default class Database implements Core.Component {
     return Promise.resolve(app);
   }
 
+  register(model: Route.Api.IModel) {
+    if (_db.instance) {
+      let modelInstance = _db.instance.define(model.name, model.schema, model.methods);
+      modelInstance = _db.events.register(modelInstance);
+      _db.models[model.name] = modelInstance;
+      if (model.seeds) {
+        _log.debug('Adding seed for [' + model.name + ']', model.seeds);
+        _db.seeds.push({ model: modelInstance, data: model.seeds });
+      }
+    } else {
+      _log.warning('The database doesn\'t have an instance.', _db);
+    }
+  }
+
+  /**
+   * Get all of the database models and sync them with the database instance.
+   * Will create the tables if needed.
+   * @returns {Promise} Completed when all models have been synced
+   */
   sync() {
     _log.info('Syncing all models to the database');
     let _promises: any = [];
@@ -116,6 +138,14 @@ export default class Database implements Core.Component {
     return Promise.all(_promises);
   }
 
+  /**
+   * Seed the database with values
+   * If data already exists in the database, and the overwrite flag is not set, then
+   * no data will be seeded.  If the flag is set, then the table will be dropped, readded
+   * then seeded.
+   * Otherwise if there is no existing data then it will seed the database;
+   * @returns {Promise} Completes when all seeding is finished
+   */
   seed(): Promise<void | {} | [any]> {
     if (_db.seeds && _db.seeds.length > 0) {
       _log.info('Seeding database with [' + _db.seeds.length + '] seeds');
@@ -124,7 +154,7 @@ export default class Database implements Core.Component {
         let promise = Promise.resolve([]);
         if (seed.data.overwrite) {
           _log.debug('Dropping [' + seed.model.getTableName() + '] before seeding')
-            .verbose('Seeding [' + seed.data.records.length + '] rows for [' + seed.model.getTableName() + ']');
+              .verbose('Seeding [' + seed.data.records.length + '] rows for [' + seed.model.getTableName() + ']');
           promise = seed.model.drop()
             .then(() => seed.model.sync())
             .then(() => seed.model.bulkCreate(seed.data.records));
@@ -149,7 +179,6 @@ export default class Database implements Core.Component {
           _log.error('Database seeding has failed', err);
           throw err;
         });
-
     } else {
       _log.verbose('No need to seed database');
       return Promise.resolve();
@@ -199,14 +228,21 @@ export default class Database implements Core.Component {
   }
 }
 
-function addSeed(model: _Sequelize.Model<any, any>, modelData: Route.Api.ISeedOptions) {
-  if (!modelData) {
-    return;
+class DatabaseEvents extends EventEmitter {
+  constructor() {
+    super();
   }
-  _log.debug('Adding seed for [' + model.getTableName() + ']', modelData);
-  let seed: ISeed = {
-    model: model,
-    data: modelData
-  };
-  _db.seeds.push(seed);
+
+  register(model: _Sequelize.Model<any, any>) {
+      model.afterBulkCreate('bulkCreate', (attr) => this.emit('bulkSave', attr));
+      model.afterBulkUpdate('bulkUpdate', (attr) => this.emit('bulkSave', attr));
+      model.afterBulkDelete('bulkDelete', (attr) => this.emit('bulkCreate', attr));
+
+      model.afterCreate('create', (attr) => this.emit('save', attr));
+      model.afterUpdate('update', (attr) => this.emit('save', attr));
+      model.afterDelete('delete', (attr) => this.emit('delete', attr));
+
+      // Not needed?
+      return model;
+  }
 }

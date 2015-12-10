@@ -1,9 +1,8 @@
 'use strict';
 
 /**
- * Import the api routes, then add them to
- * the {routes: any[]} array.  Make sure your Route
- * class has an {init()} property
+ * Import endpoints, should contain
+ * Name, Model, Routes, Socket
  */
 
 // ===========================================

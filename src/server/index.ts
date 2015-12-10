@@ -39,11 +39,10 @@ let userConfigPath: string = (args.c || args.config) || path.join(__dirname, '..
 fs.readFile(path.resolve(userConfigPath), (err: any, data: any) => {
   if (err) {
     Logger.create('Init')
-      .error('Config file [' + userConfigPath + '] not found, exiting.')
+      .warning('Config file [' + userConfigPath + '] not found, using defaults.')
       .info('Create config in [' + path.resolve(path.join(__dirname, '..')) + ']')
       .info('Or add flag "--config=/path/to/config"');
-
-    process.exit(1);
+    data = {};
   }
   initConfig(JSON.parse(data))
     .then((config: Config.IConfig) => Logger.init(config))

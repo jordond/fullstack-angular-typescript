@@ -1,17 +1,36 @@
 'use strict';
 
 import { Request, Response } from 'express';
+import { Model } from 'sequelize';
+import { database } from '../../../core/components/database';
+
+let Things: Model<any, any>;
+
+/**
+ *
+ * TODO
+ * Change to using a DAO, this is for testing
+ *
+ */
+
 
 export default class Controller implements Route.Api.IController {
+  constructor() {
+    Things = database().models['things'];
+  }
 
   all(req: Request, res: Response) {
-    console.log('all the things');
-    return res.status(200).json({ things: [2, 3, 4, 5, 6, 7, 87] }).end();
+    Things.findAll()
+      .then((docs) => res.status(200).json(docs))
+      .catch((err) => res.status(500).json(err));
   }
 
   create(req: Request, res: Response) {
-    console.log('create the thing');
-    return res.sendStatus(200);
+    Things.create({ title: 'TestCreate', description: 'TestDesc' })
+      .then((value) => {
+        return res.status(200).json(value);
+      })
+      .catch((err) => res.status(500).json(err));
   }
 
   show(req: Request, res: Response) {

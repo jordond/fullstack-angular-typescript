@@ -78,8 +78,7 @@ let _config: Config.IConfig = {
    * Socket.IO Configuration
    */
   socket: {
-    path: '/sync',
-    serveClient: false
+    serveClient: true
   },
 
   /**

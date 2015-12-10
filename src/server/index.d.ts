@@ -27,7 +27,7 @@ declare module Config {
   }
 
   interface ISocket {
-    path: string;
+    path?: string;
     serveClient?: boolean;
   }
 
@@ -79,7 +79,6 @@ declare module Route {
       name: string;
       routes?: any;
       model?: IModel;
-      socket?: ISocket;
     }
 
     interface IRoute {
@@ -119,7 +118,7 @@ declare module Route {
     }
 
     interface ISocket {
-
+      register: (socket: any) => void;
     }
   }
 

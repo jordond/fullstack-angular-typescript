@@ -1,12 +1,12 @@
 'use strict';
 
 import { Router } from 'express';
-
 import Controller from './things.controller';
-let ctrl = new Controller();
 
 export default class Routes implements Route.Api.IRoute {
   register(router: Router) {
+    let ctrl = new Controller();
+
     router
       .route('/things')
       .get(ctrl.all)

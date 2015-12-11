@@ -3,13 +3,11 @@
     "command": "gulp",
     "isShellCommand": true,
     "args": [
-        "--no-color"
     ],
     "tasks": [
         {
-            "taskName": "serve-dev-debug",
+            "taskName": "dev",
             "args": [
-                "serve-dev",
                 "--debug"
             ],
             "suppressTaskName": true,

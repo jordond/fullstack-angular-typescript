@@ -22,9 +22,9 @@ export function init(config: Config.IConfig) {
   conf.filename = path.resolve(path.join(logDir, conf.filename || 'logger.log'));
   mkdirp.sync(logDir);
 
-  conf.default = Console.validLevel(conf.default) ? conf.default.toUpperCase() : 'INFO';
+  conf.default = Console.validLevel(conf.default || 'UNKNOWN') ? conf.default.toUpperCase() : 'INFO';
 
-  let isValidLevel = Console.validLevel(conf.level);
+  let isValidLevel = Console.validLevel(conf.level || 'UNKNOWN');
   if (!isValidLevel) {
     log.warning('Invalid log level [' + conf.level.toUpperCase() + '] defaulting to [' + conf.default + ']');
   }
